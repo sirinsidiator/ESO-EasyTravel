@@ -11,6 +11,6 @@ local localization = { -- provided by Ayantir
 
     INVALID_TARGET_ZONE = "La destination ne peut être atteinte par une téléportation",
 
-    AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> - |caaaaaa<<2[Aucun joueur/$d joueur /$d joueurs]>>",
+    AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2[Aucun joueur/$d joueur/$d joueurs]>>",
 }
 ZO_ShallowTableCopy(localization, EasyTravel.Localization)

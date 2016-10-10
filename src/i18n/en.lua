@@ -11,6 +11,6 @@ EasyTravel.Localization = {
 
     INVALID_TARGET_ZONE = "Target cannot be reached via jump",
 
-    AUTOCOMPLETE_PLAYER_LABEL_TEMPLATE = "<<1>><<2>> - |caaaaaa<<3>>",
-    AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> - |caaaaaa<<2[no players/$d player/$d players]>>",
+    AUTOCOMPLETE_PLAYER_LABEL_TEMPLATE = "<<1>><<2>> -|caaaaaa <<3>>",
+    AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>",
 }
