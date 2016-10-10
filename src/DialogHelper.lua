@@ -12,7 +12,7 @@ end
 
 function DialogHelper:Initialize()
     local function ClearDialog()
-        CancelCast()
+        EasyTravel:CancelJump()
         self.dialog = nil
     end
 
