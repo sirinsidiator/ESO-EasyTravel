@@ -161,7 +161,7 @@ function JumpHelper:OnSocialError(eventCode, error)
 end
 
 function JumpHelper:OnTargetZoneChanged(zoneName)
-    if(zoneName == self.targetZone and self.state == STATE_NO_JUMP_TARGETS) then
+    if(self.targetZone and zoneName == self.targetZone.name and self.state == STATE_NO_JUMP_TARGETS) then
         self:Retry()
     end
 end
@@ -238,19 +238,43 @@ function JumpHelper:UnregisterEventHandlers()
     self.eventHandlersRegistered = false
 end
 
-function JumpHelper:JumpTo(zoneName)
+function JumpHelper:SetTargetZone(zone)
+    self.targetZone = zone
+    TargetHelper:ClearJumpAttempts()
+end
+
+function JumpHelper:JumpTo(zone)
     if(IsUnitInCombat("player")) then return end
     CancelCast()
-    self.targetZone = zoneName
-    DialogHelper:ShowDialog(zoneName)
-    TargetHelper:SetTargetZone(zoneName)
+    self:SetTargetZone(zone)
+    DialogHelper:ShowDialog(zone.name)
     self:RegisterEventHandlers()
     self:Retry()
 end
 
+function JumpHelper:JumpToPlayer(player)
+    if(IsUnitInCombat("player")) then return end
+    CancelCast()
+    self:SetTargetZone(nil)
+    DialogHelper:ShowDialog(player.zone.name)
+    self:RegisterEventHandlers()
+    self:SetState(STATE_JUMP_REQUESTED)
+    TargetHelper:JumpToPlayer(player)
+end
+
+function JumpHelper:JumpToGroupLeader()
+    if(IsUnitInCombat("player")) then return end
+    CancelCast()
+    self:SetTargetZone(nil)
+    DialogHelper:ShowDialog(GetUnitName(GetGroupLeaderUnitTag()))
+    self:RegisterEventHandlers()
+    self:SetState(STATE_JUMP_REQUESTED)
+    TargetHelper:JumpToGroupLeader()
+end
+
 function JumpHelper:Retry()
-    TargetHelper:RebuildTargetList()
-    if(TargetHelper:JumpToNextTarget()) then
+    if(not self.targetZone) then return end
+    if(TargetHelper:JumpToNextTargetInZone(self.targetZone)) then
         self:SetState(STATE_JUMP_REQUESTED)
     else
         self:SetState(STATE_NO_JUMP_TARGETS)
@@ -261,6 +285,7 @@ function JumpHelper:CleanUp()
     DialogHelper:HideDialog()
     self:UnregisterEventHandlers()
     self:SetState(STATE_READY)
+    TargetHelper:ClearJumpAttempts()
 end
 
 EasyTravel.JumpHelper = JumpHelper:New()

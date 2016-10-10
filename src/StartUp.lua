@@ -28,6 +28,8 @@ local function Print(message, ...)
     df("[%s] %s", ADDON_NAME, message:format(...))
 end
 
+EasyTravel.RegisterForEvent = RegisterForEvent
+EasyTravel.UnregisterForEvent = UnregisterForEvent
 EasyTravel.WrapFunction = WrapFunction
 EasyTravel.Print = Print
 
@@ -43,6 +45,7 @@ end
 OnAddonLoaded(function()
     local L = EasyTravel.Localization
     local JumpHelper = EasyTravel.JumpHelper
+    local ZoneList = EasyTravel.ZoneList
 
     local CANNOT_JUMP_TO = {
         [1] = true, -- Tamriel
@@ -57,14 +60,20 @@ OnAddonLoaded(function()
             return false
         end
 
-        ZO_WorldMap_SetMapByIndex(mapIndex)
-        local targetZone = GetZoneNameByIndex(GetCurrentMapZoneIndex())
-        JumpHelper:JumpTo(targetZone)
+        local targetZone = ZoneList:SetMapByIndex(mapIndex)
+        if(targetZone) then
+            JumpHelper:JumpTo(targetZone)
+            return true
+        end
+    end
 
-        return true
+    local function CancelJump()
+        CancelCast()
+        JumpHelper:CleanUp()
     end
 
     EasyTravel.JumpTo = AttemptJumpTo
+    EasyTravel.CancelJump = CancelJump
 
     ZO_PreHook("ZO_WorldMapLocationRowLocation_OnMouseUp", function(label, button, upInside)
         if(upInside and button == MOUSE_BUTTON_INDEX_RIGHT) then
