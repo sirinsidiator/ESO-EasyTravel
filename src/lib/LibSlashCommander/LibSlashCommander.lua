@@ -1,5 +1,5 @@
 local LIB_IDENTIFIER = "LibSlashCommander"
-local lib = LibStub:NewLibrary(LIB_IDENTIFIER, 2)
+local lib = LibStub:NewLibrary(LIB_IDENTIFIER, 3)
 
 if not lib then
     return -- already loaded and no upgrade necessary
@@ -145,6 +145,7 @@ local function Load()
 
     local globalLookup = setmetatable({}, {
         __index = function(_, key)
+            key = zo_strlower(key)
             return SLASH_COMMANDS[key] or CHAT_SYSTEM.switchLookup[key]
         end,
         __newindex = function(_, key, value)
@@ -159,7 +160,7 @@ local function Load()
 end
 
 lib.Init = function()
-    lib.Init = nil
+    lib.Init = function() end
     if(lib.Unload) then lib.Unload() end
     Load()
 end

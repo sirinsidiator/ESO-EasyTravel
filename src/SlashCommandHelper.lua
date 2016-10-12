@@ -75,7 +75,7 @@ function SlashCommandHelper:GetPlayerResults()
 
     for lower, player in pairs(players) do
         local label = zo_strformat(L["AUTOCOMPLETE_PLAYER_LABEL_TEMPLATE"], player.characterName, player.displayName, player.zone.name)
-        playerList[lower] = label
+        playerList[zo_strlower(player.characterName .. player.displayName)] = label
         self.playerLookup[label] = player.displayName
     end
 

@@ -9,7 +9,8 @@ local ERROR_AUTOCOMPLETE_RESULT_NOT_VALID = "Autocomplete provider returned inva
 local ERROR_ALREADY_HAS_ALIAS = "Tried to overwrite existing command alias"
 local ERROR_CALLED_WITHOUT_CALLBACK = "Tried to call command while no callback is set"
 
-local Command = ZO_Object:Subclass()
+if(not lib.Command) then lib.Command = ZO_Object:Subclass() end
+local Command = lib.Command
 
 local function AssertIsType(value, typeName)
     assert(type(value) == typeName, ERROR_INVALID_TYPE)
@@ -245,5 +246,4 @@ function Command:GetAutoCompleteResultFromDisplayText(text)
     return text
 end
 
-lib.Command = Command
 lib.Init()
