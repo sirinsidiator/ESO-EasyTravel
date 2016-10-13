@@ -39,7 +39,11 @@ function ZoneList:SetMapByIndex(mapIndex)
 end
 
 function ZoneList:GetCurrentZone()
-    local currentIndex = GetUnitZoneIndex("player")
+    SetMapToPlayerLocation()
+    while not(GetMapType() == MAPTYPE_ZONE and GetMapContentType() ~= MAP_CONTENT_DUNGEON) do
+        if (MapZoomOut() ~= SET_MAP_RESULT_MAP_CHANGED) then break end
+    end
+    local currentIndex = GetCurrentMapZoneIndex()
     return self.zoneByIndex[currentIndex]
 end
 
