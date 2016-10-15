@@ -2,6 +2,7 @@ local L = EasyTravel.Localization
 local JumpHelper = EasyTravel.JumpHelper
 local ZoneList = EasyTravel.ZoneList
 local PlayerList = EasyTravel.PlayerList
+local Print = EasyTravel.Print
 
 local SlashCommandHelper = ZO_Object:Subclass()
 
@@ -46,6 +47,13 @@ function SlashCommandHelper:SlashCommandCallback(input)
     elseif(PlayerList:HasDisplayName(input) or PlayerList:HasCharacterName(input)) then
         local player = PlayerList:GetPlayerByDisplayName(input) or PlayerList:GetPlayerByCharacterName(input)
         JumpHelper:JumpToPlayer(player)
+    elseif(input == "") then
+        if(IsUnitGrouped("player") and not IsUnitGroupLeader("player")) then
+            JumpHelper:JumpToGroupLeader()
+        else
+            local zone = ZoneList:GetCurrentZone()
+            JumpHelper:JumpTo(zone)
+        end
     else
         local targetZone = ZoneList:GetZoneFromPartialName(input)
         if(targetZone) then
@@ -59,12 +67,8 @@ function SlashCommandHelper:SlashCommandCallback(input)
             return
         end
 
-        if(IsUnitGrouped("player") and not IsUnitGroupLeader("player")) then
-            JumpHelper:JumpToGroupLeader()
-        else
-            local zone = ZoneList:GetCurrentZone()
-            JumpHelper:JumpTo(zone)
-        end
+        Print(L["INVALID_TARGET_ZONE"])
+        PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
     end
 end
 
