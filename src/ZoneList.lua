@@ -15,22 +15,41 @@ function ZoneList:Initialize()
     self.zoneByName = {}
     self.autocompleteList = {}
 
-    -- there is currently no good way to find the correct zones across languages, so we have to put them in a list
+    -- CanJumpToPlayerInZone currently doesn't return the correct results, but should hopefully work in a future update
+--    local zoneIndex = 1
+--    while true do
+--        local zoneName = GetZoneNameByIndex(zoneIndex)
+--        if(zoneName == "") then break end
+--
+--        local zoneId = GetZoneId(zoneIndex)
+--        local canJump, result = CanJumpToPlayerInZone(zoneId)
+--        if(canJump) then
+--            zoneName = zo_strformat("<<1>>", GetZoneNameByIndex(zoneIndex))
+--            self:AddEntry(zoneId, zoneIndex, zoneName)
+--        end
+--        zoneIndex = zoneIndex + 1
+--    end
+
+    -- for now we have to put the zoneIds in a list
     local zoneIds = {3, 19, 20, 41, 57, 58, 92, 101, 103, 104, 108, 117, 280, 281, 347, 381, 382, 383, 534, 535, 537, 684, 816, 823, 888}
     for i = 1, #zoneIds do
         local zoneId = zoneIds[i]
         local zoneIndex = GetZoneIndex(zoneId)
         local zoneName = zo_strformat("<<1>>", GetZoneNameByIndex(zoneIndex))
-        local zoneData = {
-            id = zoneId,
-            index = zoneIndex,
-            name = zoneName
-        }
-        self.zoneById[zoneId] = zoneData
-        self.zoneByIndex[zoneIndex] = zoneData
-        self.zoneByName[zoneName] = zoneData
-        self.autocompleteList[zo_strlower(zoneName)] = zoneName
+        self:AddEntry(zoneId, zoneIndex, zoneName)
     end
+end
+
+function ZoneList:AddEntry(zoneId, zoneIndex, zoneName)
+    local zoneData = {
+        id = zoneId,
+        index = zoneIndex,
+        name = zoneName
+    }
+    self.zoneById[zoneId] = zoneData
+    self.zoneByIndex[zoneIndex] = zoneData
+    self.zoneByName[zoneName] = zoneData
+    self.autocompleteList[zo_strlower(zoneData.name)] = zoneData.name
 end
 
 function ZoneList:SetMapByIndex(mapIndex)
