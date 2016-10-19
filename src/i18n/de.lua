@@ -12,5 +12,7 @@ local localization = {
     INVALID_TARGET_ZONE = "Ziel kann nicht durch einen Sprung erreicht werden",
 
     AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2[keine Spieler/$d Spieler/$d Spieler]>>",
+
+    SLASH_COMMAND_DESCRIPTION = "Reise zum ausgewählten Ziel",
 }
 ZO_ShallowTableCopy(localization, EasyTravel.Localization)

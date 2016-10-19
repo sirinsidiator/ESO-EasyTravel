@@ -22,21 +22,28 @@ function SlashCommandHelper:Initialize()
         self.dirty = true
     end)
 
+    local LSC = LibStub("LibSlashCommander")
+    local this = self
+
+    local EasyTravelAutoCompleteProvider = LSC.AutoCompleteProvider:Subclass()
+    function EasyTravelAutoCompleteProvider:New()
+        return LSC.AutoCompleteProvider.New(self)
+    end
+
+    function EasyTravelAutoCompleteProvider:GetResultList()
+        return this:AutoCompleteResultProvider()
+    end
+    
+    function EasyTravelAutoCompleteProvider:GetResultFromLabel(label)
+        return this:AutoCompleteResultLookup(label)
+    end
+    
     local function SlashCommandCallback(input)
         return self:SlashCommandCallback(input)
     end
 
-    local function AutoCompleteResultProvider()
-        return self:AutoCompleteResultProvider()
-    end
-
-    local function AutoCompleteResultLookup(label)
-        return self:AutoCompleteResultLookup(label)
-    end
-
-    local LSC = LibStub("LibSlashCommander")
-    self.command = LSC:Register({"/tp", "/travel", "/goto"}, SlashCommandCallback)
-    self.command:SetAutoComplete(AutoCompleteResultProvider, nil, AutoCompleteResultLookup)
+    self.command = LSC:Register({"/tp", "/travel", "/goto"}, SlashCommandCallback, L["SLASH_COMMAND_DESCRIPTION"])
+    self.command:SetAutoComplete(EasyTravelAutoCompleteProvider:New())
 end
 
 function SlashCommandHelper:SlashCommandCallback(input)

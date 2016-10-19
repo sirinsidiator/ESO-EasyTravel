@@ -13,4 +13,6 @@ EasyTravel.Localization = {
 
     AUTOCOMPLETE_PLAYER_LABEL_TEMPLATE = "<<1>><<2>> -|caaaaaa <<3>>",
     AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>",
+
+    SLASH_COMMAND_DESCRIPTION = "Travel to the specified target",
 }

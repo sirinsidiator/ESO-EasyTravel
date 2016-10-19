@@ -12,7 +12,7 @@
 
 lib/LibStub/LibStub.lua
 lib/LibSlashCommander/LibSlashCommander.lua
-lib/LibSlashCommander/Command.lua
+lib/LibSlashCommander/descriptions/$(language).lua
 
 StartUp.lua
 
