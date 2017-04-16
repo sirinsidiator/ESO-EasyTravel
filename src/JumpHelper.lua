@@ -137,7 +137,9 @@ function JumpHelper:OnCombatEventErrors(eventCode, result, isError, abilityName,
         elseif(result == ACTION_RESULT_FAILED) then
             self:Retry()
         else
-            Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
+            if(result ~= ACTION_RESULT_STUNNED) then -- happens when a player uses /tp while collecting a skyshard
+                Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
+            end
             self:CleanUp()
         end
     end
