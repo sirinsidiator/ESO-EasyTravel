@@ -59,6 +59,10 @@ function SlashCommandHelper:SlashCommandCallback(input)
             JumpHelper:JumpToGroupLeader()
         else
             local zone = ZoneList:GetCurrentZone()
+            if(not zone) then
+                Print(L["INVALID_TARGET_ZONE"])
+                PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
+            end
             JumpHelper:JumpTo(zone)
         end
     else
