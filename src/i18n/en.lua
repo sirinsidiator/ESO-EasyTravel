@@ -13,6 +13,10 @@ EasyTravel.Localization = {
 
     AUTOCOMPLETE_PLAYER_LABEL_TEMPLATE = "<<1>><<2>> -|caaaaaa <<3>>",
     AUTOCOMPLETE_ZONE_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>",
+    AUTOCOMPLETE_HOME_LABEL = "home",
+    AUTOCOMPLETE_UNLOCKED_HOME_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2>>",
+    AUTOCOMPLETE_LOCKED_HOME_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2>> (preview)",
+    AUTOCOMPLETE_PRIMARY_HOME_LABEL_TEMPLATE = "<<1>> -|caaaaaa <<2>>, <<3>>",
 
     SLASH_COMMAND_DESCRIPTION = "Travel to the specified target",
 }

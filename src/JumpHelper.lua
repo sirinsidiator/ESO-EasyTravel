@@ -274,6 +274,16 @@ function JumpHelper:JumpToGroupLeader()
     TargetHelper:JumpToGroupLeader()
 end
 
+function JumpHelper:JumpToHouse(houseId)
+    if(IsUnitInCombat("player")) then return end
+    CancelCast()
+    self:SetTargetZone(nil)
+    DialogHelper:ShowDialog(GetCollectibleNickname(GetCollectibleIdForHouse(houseId)))
+    self:RegisterEventHandlers()
+    self:SetState(STATE_JUMP_REQUESTED)
+    RequestJumpToHouse(houseId)
+end
+
 function JumpHelper:Retry()
     if(not self.targetZone) then return end
     if(TargetHelper:JumpToNextTargetInZone(self.targetZone)) then

@@ -13,7 +13,10 @@ function ZoneList:Initialize()
     self.zoneById = {}
     self.zoneByIndex = {}
     self.zoneByName = {}
-    self.autocompleteList = {}
+    self.zoneAutocompleteList = {}
+
+    self.houseByName = {}
+    self.houseAutocompleteList = {}
 
     -- CanJumpToPlayerInZone currently doesn't return the correct results, but should hopefully work in a future update
 --    local zoneIndex = 1
@@ -38,6 +41,15 @@ function ZoneList:Initialize()
         local zoneName = zo_strformat("<<1>>", GetZoneNameByIndex(zoneIndex))
         self:AddEntry(zoneId, zoneIndex, zoneName)
     end
+
+    WORLD_MAP_HOUSES_DATA:RefreshHouseList()
+    local houses = WORLD_MAP_HOUSES_DATA:GetHouseList()
+    for i = 1, #houses do
+        local house = houses[i]
+        local name = house.houseName
+        self.houseByName[name] = house
+        self.houseAutocompleteList[zo_strlower(name)] = name
+    end
 end
 
 function ZoneList:AddEntry(zoneId, zoneIndex, zoneName)
@@ -49,7 +61,7 @@ function ZoneList:AddEntry(zoneId, zoneIndex, zoneName)
     self.zoneById[zoneId] = zoneData
     self.zoneByIndex[zoneIndex] = zoneData
     self.zoneByName[zoneName] = zoneData
-    self.autocompleteList[zo_strlower(zoneData.name)] = zoneData.name
+    self.zoneAutocompleteList[zo_strlower(zoneData.name)] = zoneData.name
 end
 
 function ZoneList:SetMapByIndex(mapIndex)
@@ -87,9 +99,27 @@ function ZoneList:GetZoneList()
 end
 
 function ZoneList:GetZoneFromPartialName(partialZone)
-    local results = GetTopMatchesByLevenshteinSubStringScore(self.autocompleteList, partialZone, 1, 1)
+    local results = GetTopMatchesByLevenshteinSubStringScore(self.zoneAutocompleteList, partialZone, 1, 1)
     if(#results == 0) then return end
     return self.zoneByName[results[1]]
+end
+
+function ZoneList:GetHouseByName(houseName)
+    return self.houseByName[zo_strformat("<<1>>", houseName)]
+end
+
+function ZoneList:HasHouse(houseName)
+    return self.houseByName[zo_strformat("<<1>>", houseName)] ~= nil
+end
+
+function ZoneList:GetHouseList()
+    return self.houseByName
+end
+
+function ZoneList:GetHouseFromPartialName(partialHouseName)
+    local results = GetTopMatchesByLevenshteinSubStringScore(self.houseAutocompleteList, partialHouseName, 1, 1)
+    if(#results == 0) then return end
+    return self.houseByName[results[1]]
 end
 
 EasyTravel.ZoneList = ZoneList:New()
