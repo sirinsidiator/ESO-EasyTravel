@@ -66,11 +66,12 @@ function SlashCommandHelper:SlashCommandCallback(input)
             JumpHelper:JumpToGroupLeader()
         else
             local zone = ZoneList:GetCurrentZone()
-            if(not zone) then
+            if(not zone) then -- TODO: remember last zone we have been in and jump there instead
                 Print(L["INVALID_TARGET_ZONE"])
                 PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
+            else
+                JumpHelper:JumpTo(zone)
             end
-            JumpHelper:JumpTo(zone)
         end
     else
         local targetZone = ZoneList:GetZoneFromPartialName(input)
