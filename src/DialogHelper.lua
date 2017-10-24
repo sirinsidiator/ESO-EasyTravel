@@ -47,10 +47,23 @@ end
 
 function DialogHelper:ShowDialog(zoneName)
     self.dialog = ZO_Dialogs_ShowDialog(JUMP_STATUS_DIALOG, {}, {titleParams = {zoneName}})
+    local dialog = self.dialog
+    dialog:ClearAnchors()
+    dialog:SetAnchor(BOTTOM, GuiRoot, BOTTOM, 0, -100)
+    SetFrameLocalPlayerInGameCamera(true)
+    SetFrameLocalPlayerTarget(0.5, 0.65)
+    SetFullscreenEffect(FULLSCREEN_EFFECT_CHARACTER_FRAMING_BLUR, 0.5, 0.65)
+    SCENE_MANAGER:ShowBaseScene()
+    local underlay = dialog:GetNamedChild("ModalUnderlay")
+    self.originalAlpha = underlay:GetAlpha()
+    underlay:SetAlpha(0.2)
 end
 
 function DialogHelper:HideDialog()
+    self.dialog:GetNamedChild("ModalUnderlay"):SetAlpha(self.originalAlpha)
     ZO_Dialogs_ReleaseDialog(JUMP_STATUS_DIALOG)
+    SetFrameLocalPlayerInGameCamera(false)
+    SetFullscreenEffect(FULLSCREEN_EFFECT_NONE)
 end
 
 function DialogHelper:SetText(text)
