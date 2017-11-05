@@ -87,9 +87,13 @@ function PlayerList:Clear()
     ZO_ClearTable(self.autocompleteList)
 end
 
-function PlayerList:AddPlayer(displayName, characterName, level, cp, zoneName, type)
-    local zone = ZoneList:GetZoneByZoneName(zoneName)
-    if(not zone) then return end
+function PlayerList:AddPlayer(displayName, characterName, level, cp, zoneName, type, zone)
+    if(not zone) then
+        zone = ZoneList:GetZoneByZoneName(zoneName)
+    end
+    local lowerDisplayName = zo_strlower(displayName)
+    -- can't jump to players without a zone and we also don't want to overwrite already collected players
+    if(not zone or self.players[lowerDisplayName]) then return end
 
     characterName = zo_strformat("<<1>>", characterName)
     local playerData = {
@@ -105,7 +109,6 @@ function PlayerList:AddPlayer(displayName, characterName, level, cp, zoneName, t
         self.playersInZone[zone] = {}
     end
 
-    local lowerDisplayName = zo_strlower(displayName)
     local lowerCharacterName = zo_strlower(characterName)
     self.playersInZone[zone][lowerDisplayName] = playerData
     self.players[lowerDisplayName] = playerData
@@ -123,7 +126,8 @@ function PlayerList:CollectGroupMembers()
             local level = GetUnitLevel(unitTag)
             local cp = GetUnitChampionPoints(unitTag)
             local zoneName = GetUnitZone(unitTag)
-            self:AddPlayer(displayName, characterName, level, cp, zoneName, PlayerList.TYPE_GROUP)
+            local zone = ZoneList:GetZoneForGroupMember(unitTag)
+            self:AddPlayer(displayName, characterName, level, cp, zoneName, PlayerList.TYPE_GROUP, zone)
         end
     end
 end

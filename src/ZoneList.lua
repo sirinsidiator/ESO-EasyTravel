@@ -90,6 +90,18 @@ function ZoneList:GetZoneByZoneName(zoneName)
     return self.zoneByName[zo_strformat("<<1>>", zoneName)]
 end
 
+function ZoneList:GetZoneForGroupMember(unitTag)
+    local zoneIndex = GetUnitZoneIndex(unitTag)
+    if(zoneIndex) then
+        local zoneId = GetZoneId(zoneIndex)
+        return {
+            id = zoneId,
+            index = zoneIndex,
+            name = GetUnitZone(unitTag)
+        }
+    end
+end
+
 function ZoneList:HasZone(zoneName)
     return self.zoneByName[zo_strformat("<<1>>", zoneName)] ~= nil
 end
