@@ -248,43 +248,42 @@ function JumpHelper:SetTargetZone(zone)
     TargetHelper:ClearJumpAttempts()
 end
 
-function JumpHelper:JumpTo(zone)
-    if(IsUnitInCombat("player")) then return end
+function JumpHelper:PrepareJump(message, zone)
+    if(IsUnitInCombat("player")) then return false end
     CancelCast()
     self:SetTargetZone(zone)
-    DialogHelper:ShowDialog(zone.name)
+    DialogHelper:ShowDialog(message)
     self:RegisterEventHandlers()
-    self:Retry()
+    if(not zone) then
+        self:SetState(STATE_JUMP_REQUESTED)
+    end
+    return true
+end
+
+function JumpHelper:JumpTo(zone)
+    if(self:PrepareJump(zone.name, zone)) then
+        self:Retry()
+    end
 end
 
 function JumpHelper:JumpToPlayer(player)
-    if(IsUnitInCombat("player")) then return end
-    CancelCast()
-    self:SetTargetZone(nil)
-    DialogHelper:ShowDialog(player.zone.name)
-    self:RegisterEventHandlers()
-    self:SetState(STATE_JUMP_REQUESTED)
-    TargetHelper:JumpToPlayer(player)
+    if(self:PrepareJump(player.zone.name)) then
+        TargetHelper:JumpToPlayer(player)
+    end
 end
 
 function JumpHelper:JumpToGroupLeader()
-    if(IsUnitInCombat("player")) then return end
-    CancelCast()
-    self:SetTargetZone(nil)
-    DialogHelper:ShowDialog(GetUnitName(GetGroupLeaderUnitTag()))
-    self:RegisterEventHandlers()
-    self:SetState(STATE_JUMP_REQUESTED)
-    TargetHelper:JumpToGroupLeader()
+    local message = GetUnitName(GetGroupLeaderUnitTag())
+    if(self:PrepareJump(message)) then
+        TargetHelper:JumpToGroupLeader()
+    end
 end
 
 function JumpHelper:JumpToHouse(houseId)
-    if(IsUnitInCombat("player")) then return end
-    CancelCast()
-    self:SetTargetZone(nil)
-    DialogHelper:ShowDialog(GetCollectibleNickname(GetCollectibleIdForHouse(houseId)))
-    self:RegisterEventHandlers()
-    self:SetState(STATE_JUMP_REQUESTED)
-    RequestJumpToHouse(houseId)
+    local message = GetCollectibleNickname(GetCollectibleIdForHouse(houseId))
+    if(self:PrepareJump(message)) then
+        TargetHelper:JumpToHouse(houseId)
+    end
 end
 
 function JumpHelper:Retry()

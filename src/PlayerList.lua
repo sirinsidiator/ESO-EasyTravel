@@ -7,6 +7,7 @@ PlayerList.TYPE_GROUP = 1
 PlayerList.TYPE_FRIEND = 2
 PlayerList.TYPE_GUILD = 3
 PlayerList.TYPE_LEADER = 4
+PlayerList.TYPE_HOUSE = 5
 
 PlayerList.SET_DIRTY = "SET_DIRTY"
 

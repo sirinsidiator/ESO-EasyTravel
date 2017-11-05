@@ -5,6 +5,7 @@ local JUMP_TO = {
     [PlayerList.TYPE_FRIEND] = JumpToFriend,
     [PlayerList.TYPE_GUILD] = JumpToGuildMember,
     [PlayerList.TYPE_LEADER] = JumpToGroupLeader,
+    [PlayerList.TYPE_HOUSE] = RequestJumpToHouse,
 }
 
 local TargetHelper = ZO_Object:Subclass()
@@ -48,6 +49,10 @@ end
 
 function TargetHelper:JumpToGroupLeader()
     JumpTo(PlayerList.TYPE_LEADER)
+end
+
+function TargetHelper:JumpToHouse(houseId)
+    JumpTo(PlayerList.TYPE_HOUSE, houseId)
 end
 
 EasyTravel.TargetHelper = TargetHelper:New()
