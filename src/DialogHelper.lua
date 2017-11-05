@@ -50,20 +50,33 @@ function DialogHelper:ShowDialog(zoneName)
     local dialog = self.dialog
     dialog:ClearAnchors()
     dialog:SetAnchor(BOTTOM, GuiRoot, BOTTOM, 0, -100)
-    SetFrameLocalPlayerInGameCamera(true)
-    SetFrameLocalPlayerTarget(0.5, 0.65)
-    SetFullscreenEffect(FULLSCREEN_EFFECT_CHARACTER_FRAMING_BLUR, 0.5, 0.65)
-    SCENE_MANAGER:ShowBaseScene()
+
     local underlay = dialog:GetNamedChild("ModalUnderlay")
     self.originalAlpha = underlay:GetAlpha()
     underlay:SetAlpha(0.2)
+    self.underlay = underlay
+
+    SetFrameLocalPlayerInGameCamera(true)
+    SetFrameLocalPlayerTarget(0.5, 0.65)
+    SetFullscreenEffect(FULLSCREEN_EFFECT_CHARACTER_FRAMING_BLUR, 0.5, 0.65)
+
+    self.wasWorldMapShowing = ZO_WorldMap_IsWorldMapShowing()
+    SCENE_MANAGER:ShowBaseScene()
 end
 
-function DialogHelper:HideDialog()
-    self.dialog:GetNamedChild("ModalUnderlay"):SetAlpha(self.originalAlpha)
+function DialogHelper:HideDialog(wasSuccess)
+    self.underlay:SetAlpha(self.originalAlpha)
     ZO_Dialogs_ReleaseDialog(JUMP_STATUS_DIALOG)
     SetFrameLocalPlayerInGameCamera(false)
     SetFullscreenEffect(FULLSCREEN_EFFECT_NONE)
+
+    if(self.wasWorldMapShowing) then
+        if(not wasSuccess) then
+            ZO_WorldMap_ShowWorldMap()
+        else
+            self.wasWorldMapShowing = false
+        end
+    end
 end
 
 function DialogHelper:SetText(text)

@@ -69,7 +69,9 @@ OnAddonLoaded(function()
 
     local function CancelJump()
         CancelCast()
-        JumpHelper:CleanUp()
+        zo_callLater(function()
+            JumpHelper:CleanUp(false)
+        end, 1)
     end
 
     EasyTravel.JumpTo = AttemptJumpTo

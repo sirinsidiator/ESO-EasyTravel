@@ -13,6 +13,9 @@ local STATE_JUMP_STARTED = 3
 local STATE_JUMP_REQUEST_FAILED = 4
 local STATE_NO_JUMP_TARGETS = 5
 
+local RESULT_SUCCESS = true
+local RESULT_FAILURE = false
+
 local STATUS_TEXT = {
     [STATE_READY] = L["STATUS_TEXT_READY"],
     [STATE_JUMP_REQUESTED] = L["STATUS_TEXT_JUMP_REQUESTED"],
@@ -71,7 +74,7 @@ function JumpHelper:Initialize()
     self.HandleCombatEventErrors = function(...) self:OnCombatEventErrors(...) end
     self.HandleWeaponPairLockState = function(...) self:OnWeaponPairLockStateChanged(...) end
     self.HandleSocialErrors = function(...) self:OnSocialError(...) end
-    self.HandleCleanup = function() self:CleanUp() end
+    self.HandleCleanup = function() self:CleanUp(RESULT_SUCCESS) end
 
     self.HandleFriendTargetZoneChange = function(_, _, _, zoneName) self:OnTargetZoneChanged(zoneName) end
     self.HandleGuildTargetZoneChange = function(_, _, _, _, zoneName) self:OnTargetZoneChanged(zoneName) end
@@ -118,7 +121,7 @@ end
 function JumpHelper:OnCombatStateChanged(eventCode, inCombat)
     if(inCombat) then
         CancelCast()
-        self:CleanUp()
+        self:CleanUp(RESULT_FAILURE)
     end
 end
 
@@ -140,14 +143,14 @@ function JumpHelper:OnCombatEventErrors(eventCode, result, isError, abilityName,
             if(result ~= ACTION_RESULT_STUNNED) then -- happens when a player uses /tp while collecting a skyshard
                 Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
             end
-            self:CleanUp()
+            self:CleanUp(RESULT_FAILURE)
         end
     end
 end
 
 function JumpHelper:OnWeaponPairLockStateChanged(eventCode, locked)
     if(self.state == STATE_JUMP_STARTED and not locked) then
-        self:CleanUp()
+        self:CleanUp(RESULT_FAILURE)
     end
 end
 
@@ -157,7 +160,7 @@ function JumpHelper:OnSocialError(eventCode, error)
             self:SetState(STATE_JUMP_REQUEST_FAILED)
             self:Retry()
         else
-            self:CleanUp()
+            self:CleanUp(RESULT_FAILURE)
         end
     end
 end
@@ -293,8 +296,8 @@ function JumpHelper:Retry()
     end
 end
 
-function JumpHelper:CleanUp()
-    DialogHelper:HideDialog()
+function JumpHelper:CleanUp(wasSuccess)
+    DialogHelper:HideDialog(wasSuccess)
     self:UnregisterEventHandlers()
     self:SetState(STATE_READY)
     TargetHelper:ClearJumpAttempts()
