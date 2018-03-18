@@ -105,12 +105,12 @@ function PlayerList:AddPlayer(displayName, characterName, level, cp, zoneName, t
         type = type
     }
 
-    if(not self.playersInZone[zone]) then
-        self.playersInZone[zone] = {}
+    if(not self.playersInZone[zone.id]) then
+        self.playersInZone[zone.id] = {}
     end
 
     local lowerCharacterName = zo_strlower(characterName)
-    self.playersInZone[zone][lowerDisplayName] = playerData
+    self.playersInZone[zone.id][lowerDisplayName] = playerData
     self.players[lowerDisplayName] = playerData
     self.characters[lowerCharacterName] = playerData
     self.autocompleteList[lowerDisplayName] = displayName
@@ -121,7 +121,7 @@ function PlayerList:CollectGroupMembers()
     for i = 1, GetGroupSize() do
         local unitTag = GetGroupUnitTagByIndex(i)
         local displayName = GetUnitDisplayName(unitTag)
-        if(not self:HasDisplayName(displayName) and displayName ~= self.displayName and IsUnitOnline(unitTag)) then
+        if((not self:HasDisplayName(displayName)) and displayName ~= self.displayName and IsUnitOnline(unitTag)) then
             local characterName = GetUnitName(unitTag)
             local level = GetUnitLevel(unitTag)
             local cp = GetUnitChampionPoints(unitTag)
@@ -136,7 +136,7 @@ function PlayerList:CollectFriends()
     for i = 1, GetNumFriends() do
         local displayName, _, status = GetFriendInfo(i)
         local hasChar, characterName, zoneName, _, _, level, cp = GetFriendCharacterInfo(i)
-        if(hasChar and not self:HasDisplayName(displayName) and displayName ~= self.displayName and status ~= PLAYER_STATUS_OFFLINE) then
+        if(hasChar and (not self:HasDisplayName(displayName)) and displayName ~= self.displayName and status ~= PLAYER_STATUS_OFFLINE) then
             self:AddPlayer(displayName, characterName, level, cp, zoneName, PlayerList.TYPE_FRIEND)
         end
     end
@@ -148,7 +148,7 @@ function PlayerList:CollectGuildMembers()
         for i = 1, GetNumGuildMembers(guildId) do
             local displayName, _, _, status = GetGuildMemberInfo(guildId, i)
             local hasChar, characterName, zoneName, _, _, level, cp = GetGuildMemberCharacterInfo(guildId, i)
-            if(hasChar and not self:HasDisplayName(displayName) and displayName ~= self.displayName and status ~= PLAYER_STATUS_OFFLINE) then
+            if(hasChar and (not self:HasDisplayName(displayName)) and displayName ~= self.displayName and status ~= PLAYER_STATUS_OFFLINE) then
                 self:AddPlayer(displayName, characterName, level, cp, zoneName, PlayerList.TYPE_GUILD)
             end
         end
@@ -170,7 +170,7 @@ end
 function PlayerList:GetSortedPlayersInZone(zone)
     self:Rebuild()
     local sorted = {}
-    local players = self.playersInZone[zone]
+    local players = self.playersInZone[zone.id]
     if(players) then
         for _, player in pairs(players) do
             sorted[#sorted + 1] = player
@@ -184,7 +184,7 @@ end
 function PlayerList:GetPlayerCountForZone(zone)
     self:Rebuild()
     local count = 0
-    local players = self.playersInZone[zone]
+    local players = self.playersInZone[zone.id]
     if(players) then
         count = NonContiguousCount(players)
     end
