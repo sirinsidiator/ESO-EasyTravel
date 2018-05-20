@@ -140,7 +140,8 @@ function JumpHelper:OnCombatEventErrors(eventCode, result, isError, abilityName,
         elseif(result == ACTION_RESULT_FAILED) then
             self:Retry()
         else
-            if(result ~= ACTION_RESULT_STUNNED) then -- happens when a player uses /tp while collecting a skyshard
+            -- TODO: show proper message why the teleport failed when stunned or sprinting (state can get stuck)
+            if(result ~= ACTION_RESULT_STUNNED and result ~= ACTION_RESULT_SPRINTING) then -- happens when a player uses /tp while collecting a skyshard
                 Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
             end
             self:CleanUp(RESULT_FAILURE)
