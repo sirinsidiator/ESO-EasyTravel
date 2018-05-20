@@ -34,7 +34,7 @@ function ZoneList:Initialize()
 --    end
 
     -- for now we have to put the zoneIds in a list
-    local zoneIds = {3, 19, 20, 41, 57, 58, 92, 101, 103, 104, 108, 117, 280, 281, 347, 381, 382, 383, 534, 535, 537, 684, 816, 823, 849, 888, 980, 981}
+    local zoneIds = {3, 19, 20, 41, 57, 58, 92, 101, 103, 104, 108, 117, 280, 281, 347, 381, 382, 383, 534, 535, 537, 684, 816, 823, 849, 888, 980, 981, 1011, 1027}
     for i = 1, #zoneIds do
         local zoneId = zoneIds[i]
         local zoneIndex = GetZoneIndex(zoneId)
