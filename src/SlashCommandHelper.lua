@@ -35,32 +35,39 @@ function SlashCommandHelper:Initialize()
     function EasyTravelAutoCompleteProvider:GetResultList()
         return this:AutoCompleteResultProvider()
     end
-    
+
     function EasyTravelAutoCompleteProvider:GetResultFromLabel(label)
         return this:AutoCompleteResultLookup(label)
     end
-    
+
     local function SlashCommandCallback(input)
         return self:SlashCommandCallback(input)
     end
+    self.autocompleteResultProvider = EasyTravelAutoCompleteProvider
 
     self.command = LSC:Register({"/tp", "/travel", "/goto"}, SlashCommandCallback, L["SLASH_COMMAND_DESCRIPTION"])
     self.command:SetAutoComplete(EasyTravelAutoCompleteProvider:New())
 end
 
-function SlashCommandHelper:SlashCommandCallback(input)
-    PlayerList:Rebuild()
+function SlashCommandHelper:SlashCommandCallback(input, isTopResult)
+    if(not isTopResult) then
+        PlayerList:Rebuild()
+    end
     if(input == HOME_LABEL and GetHousingPrimaryHouse() > 0) then
         JumpHelper:JumpToHouse(GetHousingPrimaryHouse())
+        return
     elseif(ZoneList:HasZone(input)) then
         local zone = ZoneList:GetZoneByZoneName(input)
         JumpHelper:JumpTo(zone)
+        return
     elseif(ZoneList:HasHouse(input)) then
         local house = ZoneList:GetHouseByName(input)
         JumpHelper:JumpToHouse(house.houseId)
+        return
     elseif(PlayerList:HasDisplayName(input) or PlayerList:HasCharacterName(input)) then
         local player = PlayerList:GetPlayerByDisplayName(input) or PlayerList:GetPlayerByCharacterName(input)
         JumpHelper:JumpToPlayer(player)
+        return
     elseif(input == "") then
         if(IsUnitGrouped("player") and not IsUnitGroupLeader("player")) then
             JumpHelper:JumpToGroupLeader()
@@ -73,28 +80,19 @@ function SlashCommandHelper:SlashCommandCallback(input)
                 JumpHelper:JumpTo(zone)
             end
         end
-    else
-        local targetZone = ZoneList:GetZoneFromPartialName(input)
-        if(targetZone) then
-            JumpHelper:JumpTo(targetZone)
-            return
-        end
+        return
+    elseif(not isTopResult) then
+        local results = self.autocompleteResultProvider:GetResultList()
+        local matches = GetTopMatchesByLevenshteinSubStringScore(results, input, 1, 1, true)
 
-        local targetHouse = ZoneList:GetHouseFromPartialName(input)
-        if(targetHouse) then
-            JumpHelper:JumpToHouse(targetHouse.houseId)
-            return
+        if(#matches > 0) then
+            local target = self.autocompleteResultProvider:GetResultFromLabel(matches[1])
+            return self:SlashCommandCallback(target, true)
         end
-
-        local player = PlayerList:GetPlayerFromPartialName(input)
-        if(player) then
-            JumpHelper:JumpToPlayer(player)
-            return
-        end
-
-        Print(L["INVALID_TARGET_ZONE"])
-        PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
     end
+
+    Print(L["INVALID_TARGET_ZONE"])
+    PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
 end
 
 function SlashCommandHelper:GetPlayerResults()
