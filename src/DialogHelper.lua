@@ -49,7 +49,7 @@ function DialogHelper:ShowDialog(zoneName)
     self.dialog = ZO_Dialogs_ShowDialog(JUMP_STATUS_DIALOG, {}, {titleParams = {zoneName}})
     local dialog = self.dialog
     dialog:ClearAnchors()
-    dialog:SetAnchor(BOTTOM, GuiRoot, BOTTOM, 0, -100)
+    dialog:SetAnchor(BOTTOM, GuiRoot, BOTTOM, 0, -125)
 
     local underlay = dialog:GetNamedChild("ModalUnderlay")
     self.originalAlpha = underlay:GetAlpha()
