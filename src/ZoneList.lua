@@ -19,22 +19,55 @@ function ZoneList:Initialize()
     self.houseAutocompleteList = {}
 
     -- CanJumpToPlayerInZone currently doesn't return the correct results, but should hopefully work in a future update
---    local zoneIndex = 1
---    while true do
---        local zoneName = GetZoneNameByIndex(zoneIndex)
---        if(zoneName == "") then break end
---
---        local zoneId = GetZoneId(zoneIndex)
---        local canJump, result = CanJumpToPlayerInZone(zoneId)
---        if(canJump) then
---            zoneName = zo_strformat("<<1>>", GetZoneNameByIndex(zoneIndex))
---            self:AddEntry(zoneId, zoneIndex, zoneName)
---        end
---        zoneIndex = zoneIndex + 1
---    end
+    --    local zoneIndex = 1
+    --    while true do
+    --        local zoneName = GetZoneNameByIndex(zoneIndex)
+    --        if(zoneName == "") then break end
+    --
+    --        local zoneId = GetZoneId(zoneIndex)
+    --        local canJump, result = CanJumpToPlayerInZone(zoneId)
+    --        if(canJump) then
+    --            zoneName = zo_strformat("<<1>>", GetZoneNameByIndex(zoneIndex))
+    --            self:AddEntry(zoneId, zoneIndex, zoneName)
+    --        end
+    --        zoneIndex = zoneIndex + 1
+    --    end
 
     -- for now we have to put the zoneIds in a list
-    local zoneIds = {3, 19, 20, 41, 57, 58, 92, 101, 103, 104, 108, 117, 280, 281, 347, 381, 382, 383, 534, 535, 537, 684, 816, 823, 849, 888, 980, 981, 1011, 1027}
+    local zoneIds = {
+        3, -- Glenumbra
+        19, -- Stormhaven
+        20, -- Rivenspire
+        41, -- Stonefalls
+        57, -- Deshaan
+        58, -- Malabal Tor
+        92, -- Bangkorai
+        101, -- Eastmarch
+        103, -- The Rift
+        104, -- Alik'r Desert
+        108, -- Greenshade
+        117, -- Shadowfen
+        280, -- Bleakrock Isle
+        281, -- Bal Foyen
+        347, -- Coldharbour
+        381, -- Auridon
+        382, -- Reaper's March
+        383, -- Grahtwood
+        534, -- Stros M'Kai
+        535, -- Betnikh
+        537, -- Khenarthi's Roost
+        684, -- Wrothgar
+        726, -- Murkmire
+        816, -- Hew's Bane
+        823, -- The Gold Coast
+        849, -- Vvardenfell
+        888, -- Craglorn
+        980, -- The Clockwork City
+        981, -- The Brass Fortress
+        1011, -- Summerset
+        1027, -- Artaeum
+        1072, -- TODO: Norg-Tzel
+    }
     for i = 1, #zoneIds do
         local zoneId = zoneIds[i]
         local zoneIndex = GetZoneIndex(zoneId)
