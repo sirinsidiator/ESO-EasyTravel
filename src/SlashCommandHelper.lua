@@ -24,7 +24,7 @@ function SlashCommandHelper:Initialize()
         self.dirty = true
     end)
 
-    local LSC = LibStub("LibSlashCommander")
+    local LSC = LibSlashCommander
     local this = self
 
     local EasyTravelAutoCompleteProvider = LSC.AutoCompleteProvider:Subclass()
