@@ -7,6 +7,9 @@ EasyTravel.Localization = {
     STATUS_TEXT_JUMP_REQUEST_FAILED = "Jump failed",
     STATUS_TEXT_NO_JUMP_TARGETS = "No suitable players found\nWaiting for new targets",
 
+    JUMP_FAILED_GENERIC = "You cannot travel right now.",
+    JUMP_FAILED_SPRINTING = "You cannot travel while sprinting.",
+
     DIALOG_TITLE = "Traveling to <<1>>",
 
     INVALID_TARGET_ZONE = "Target cannot be reached via jump",

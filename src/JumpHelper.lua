@@ -53,6 +53,12 @@ local CAN_RECOVER_FROM_SOCIAL_ERROR = {
     [SOCIAL_RESULT_CANT_JUMP_INVALID_TARGET] = true,
 }
 
+local PLAYER_BUSY_MESSAGE = {
+    [ACTION_RESULT_SPRINTING] = L["JUMP_FAILED_SPRINTING"],
+    [ACTION_RESULT_STUNNED] = L["JUMP_FAILED_GENERIC"],
+    [ACTION_RESULT_DISORIENTED] = L["JUMP_FAILED_GENERIC"],
+}
+
 local RECALL_ABILITY_ID = 6811
 local _, RECALL_CAST_TIME = GetAbilityCastInfo(RECALL_ABILITY_ID)
 RECALL_CAST_TIME = RECALL_CAST_TIME / 1000
@@ -139,11 +145,11 @@ function JumpHelper:OnCombatEventErrors(eventCode, result, isError, abilityName,
             self:Retry()
         elseif(result == ACTION_RESULT_FAILED) then
             self:Retry()
+        elseif(PLAYER_BUSY_MESSAGE[result]) then
+            ZO_Alert(UI_ALERT_CATEGORY_ALERT, SOUNDS.GENERAL_ALERT_ERROR, PLAYER_BUSY_MESSAGE[result])
+            self:CleanUp(RESULT_FAILURE)
         else
-            -- TODO: show proper message why the teleport failed when stunned or sprinting (state can get stuck)
-            if(result ~= ACTION_RESULT_STUNNED and result ~= ACTION_RESULT_SPRINTING) then -- happens when a player uses /tp while collecting a skyshard
-                Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
-            end
+            Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
             self:CleanUp(RESULT_FAILURE)
         end
     end
