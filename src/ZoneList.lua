@@ -66,7 +66,7 @@ function ZoneList:Initialize()
         981, -- The Brass Fortress
         1011, -- Summerset
         1027, -- Artaeum
-        1072, -- TODO: Norg-Tzel
+        1086, -- Elsweyr
     }
     for i = 1, #zoneIds do
         local zoneId = zoneIds[i]
