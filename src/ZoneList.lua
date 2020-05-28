@@ -68,6 +68,7 @@ function ZoneList:Initialize()
         1027, -- Artaeum
         1086, -- Northern Elsweyr
         1133, -- Southern Elsweyr
+        1146, -- Tideholm
         1160, -- Western Skyrim
         1161, -- Blackreach: Greymoor Caverns
     }
