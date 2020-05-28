@@ -68,6 +68,8 @@ function ZoneList:Initialize()
         1027, -- Artaeum
         1086, -- Northern Elsweyr
         1133, -- Southern Elsweyr
+        1160, -- Western Skyrim
+        1161, -- Blackreach: Greymoor Caverns
     }
     for i = 1, #zoneIds do
         local zoneId = zoneIds[i]
