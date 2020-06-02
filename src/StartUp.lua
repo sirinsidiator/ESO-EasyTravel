@@ -55,7 +55,18 @@ OnAddonLoaded(function()
         [GetImperialCityMapIndex()] = true,
     }
 
-    local function AttemptJumpTo(mapIndex)
+    local function ShowSubTargetMenu(subTargets, control)
+        ClearMenu()
+
+        for i = 1, #subTargets do
+            local target = subTargets[i]
+            AddCustomMenuItem(target.data.name, function() JumpHelper:JumpTo(target.data) end)
+        end
+
+        ShowMenu(control)
+    end
+
+    local function AttemptJumpTo(mapIndex, control)
         if(CANNOT_JUMP_TO[mapIndex]) then
             ZO_Alert(UI_ALERT_CATEGORY_ALERT, SOUNDS.GENERAL_ALERT_ERROR, L["INVALID_TARGET_ZONE"])
             return false
@@ -63,8 +74,14 @@ OnAddonLoaded(function()
 
         local targetZone = ZoneList:SetMapByIndex(mapIndex)
         if(targetZone) then
-            JumpHelper:JumpTo(targetZone)
-            return true
+            local subTargets = ZoneList:GetSubTargets(mapIndex)
+            if(subTargets) then
+                ShowSubTargetMenu(subTargets, control)
+                return false
+            else
+                JumpHelper:JumpTo(targetZone)
+                return true
+            end
         end
     end
 
@@ -81,7 +98,7 @@ OnAddonLoaded(function()
     ZO_PreHook("ZO_WorldMapLocationRowLocation_OnMouseUp", function(label, button, upInside)
         if(upInside and button == MOUSE_BUTTON_INDEX_RIGHT) then
             local data = ZO_ScrollList_GetData(label:GetParent())
-            AttemptJumpTo(data.index)
+            AttemptJumpTo(data.index, label)
             PlaySound(SOUNDS.MAP_LOCATION_CLICKED)
             return true
         end

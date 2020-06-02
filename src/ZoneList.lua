@@ -72,12 +72,32 @@ function ZoneList:Initialize()
         1160, -- Western Skyrim
         1161, -- Blackreach: Greymoor Caverns
     }
+
     for i = 1, #zoneIds do
         local zoneId = zoneIds[i]
         local zoneIndex = GetZoneIndex(zoneId)
         local zoneName = zo_strformat("<<1>>", GetZoneNameByIndex(zoneIndex))
         self:AddEntry(zoneId, zoneIndex, zoneName)
     end
+
+    -- some maplist entries have more than one jump target
+    local subTargets = {
+        [31] = { -- Clockwork City
+            { id = 981 }, -- The Brass Fortress
+            { id = 980 }, -- The Clockwork City
+        },
+        [37] = { -- Southern Elsweyr
+            { id = 1133 }, -- Southern Elsweyr
+            { id = 1146 }, -- Tideholm
+        },
+    }
+
+    for mapIndex, targets in pairs(subTargets) do
+        for i = 1, #targets do
+            targets[i].data = self:GetZoneByZoneId(targets[i].id)
+        end
+    end
+    self.subTargets = subTargets
 
     WORLD_MAP_HOUSES_DATA:RefreshHouseList()
     local houses = WORLD_MAP_HOUSES_DATA:GetHouseList()
@@ -104,6 +124,10 @@ end
 function ZoneList:SetMapByIndex(mapIndex)
     ZO_WorldMap_SetMapByIndex(mapIndex)
     return self.zoneByIndex[GetCurrentMapZoneIndex()]
+end
+
+function ZoneList:GetSubTargets(mapIndex)
+    return self.subTargets[mapIndex]
 end
 
 function ZoneList:GetCurrentZone()
