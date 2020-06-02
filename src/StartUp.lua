@@ -50,7 +50,8 @@ OnAddonLoaded(function()
     local CANNOT_JUMP_TO = {
         [1] = true, -- Tamriel
         [24] = true, -- The Aurbis
-        --TODO: [35] = true, -- Norg-Tzel
+        [35] = true, -- Norg-Tzel
+        [40] = true, -- Blackreach
         [GetCyrodiilMapIndex()] = true,
         [GetImperialCityMapIndex()] = true,
     }
