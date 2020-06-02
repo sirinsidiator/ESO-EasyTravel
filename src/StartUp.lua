@@ -24,14 +24,10 @@ local function WrapFunction(object, functionName, wrapper)
     object[functionName] = function(...) return wrapper(originalFunction, ...) end
 end
 
-local function Print(message, ...)
-    df("[%s] %s", ADDON_NAME, message:format(...))
-end
-
 EasyTravel.RegisterForEvent = RegisterForEvent
 EasyTravel.UnregisterForEvent = UnregisterForEvent
 EasyTravel.WrapFunction = WrapFunction
-EasyTravel.Print = Print
+EasyTravel.chat = LibChatMessage(ADDON_NAME, "ET")
 
 local function OnAddonLoaded(callback)
     local eventHandle = ""

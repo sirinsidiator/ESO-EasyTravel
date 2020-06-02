@@ -2,7 +2,7 @@ local L = EasyTravel.Localization
 local JumpHelper = EasyTravel.JumpHelper
 local ZoneList = EasyTravel.ZoneList
 local PlayerList = EasyTravel.PlayerList
-local Print = EasyTravel.Print
+local chat = EasyTravel.chat
 local HOME_LABEL = L["AUTOCOMPLETE_HOME_LABEL"]
 
 local SlashCommandHelper = ZO_Object:Subclass()
@@ -91,7 +91,7 @@ function SlashCommandHelper:SlashCommandCallback(input, isTopResult)
         end
     end
 
-    Print(L["INVALID_TARGET_ZONE"])
+    chat:Print(L["INVALID_TARGET_ZONE"])
     PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
 end
 

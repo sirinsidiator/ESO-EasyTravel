@@ -1,5 +1,5 @@
 local L = EasyTravel.Localization
-local Print = EasyTravel.Print
+local chat = EasyTravel.chat
 local WrapFunction = EasyTravel.WrapFunction
 local DialogHelper = EasyTravel.DialogHelper
 local TargetHelper = EasyTravel.TargetHelper
@@ -149,7 +149,7 @@ function JumpHelper:OnCombatEventErrors(eventCode, result, isError, abilityName,
             ZO_Alert(UI_ALERT_CATEGORY_ALERT, SOUNDS.GENERAL_ALERT_ERROR, PLAYER_BUSY_MESSAGE[result])
             self:CleanUp(RESULT_FAILURE)
         else
-            Print(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
+            chat:Printf(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
             self:CleanUp(RESULT_FAILURE)
         end
     end
