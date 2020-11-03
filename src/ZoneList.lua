@@ -71,6 +71,8 @@ function ZoneList:Initialize()
         1146, -- Tideholm
         1160, -- Western Skyrim
         1161, -- Blackreach: Greymoor Caverns
+        1207, -- The Reach
+        1208, -- Blackreach: Arkthzand Cavern
     }
 
     for i = 1, #zoneIds do
