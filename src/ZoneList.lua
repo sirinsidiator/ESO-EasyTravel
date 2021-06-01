@@ -73,6 +73,7 @@ function ZoneList:Initialize()
         1161, -- Blackreach: Greymoor Caverns
         1207, -- The Reach
         1208, -- Blackreach: Arkthzand Cavern
+        1261, -- Blackwood
     }
 
     for i = 1, #zoneIds do
