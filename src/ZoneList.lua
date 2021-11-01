@@ -74,6 +74,9 @@ function ZoneList:Initialize()
         1207, -- The Reach
         1208, -- Blackreach: Arkthzand Cavern
         1261, -- Blackwood
+        1282, -- Fargrave City District
+        1283, -- The Shambles
+        1286, -- The Deadlands
     }
 
     for i = 1, #zoneIds do
@@ -92,6 +95,10 @@ function ZoneList:Initialize()
         [37] = { -- Southern Elsweyr
             { id = 1133 }, -- Southern Elsweyr
             { id = 1146 }, -- Tideholm
+        },
+        [44] = { -- Fargrave
+            { id = 1282 }, -- Fargrave City District
+            { id = 1283 }, -- The Shambles
         },
     }
 
