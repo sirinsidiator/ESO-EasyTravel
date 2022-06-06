@@ -77,6 +77,7 @@ function ZoneList:Initialize()
         1282, -- Fargrave City District
         1283, -- The Shambles
         1286, -- The Deadlands
+        1318, -- High Isle and Amenos
     }
 
     for i = 1, #zoneIds do
