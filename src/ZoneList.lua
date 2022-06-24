@@ -1,13 +1,11 @@
-local RegisterForEvent = EasyTravel.RegisterForEvent
-local UnregisterForEvent = EasyTravel.UnregisterForEvent
+local ET = EasyTravel
+local internal = ET.internal
 
-local ZoneList = ZO_Object:Subclass()
+local RegisterForEvent = internal.RegisterForEvent
+local UnregisterForEvent = internal.UnregisterForEvent
 
-function ZoneList:New(...)
-    local obj = ZO_Object.New(self)
-    obj:Initialize(...)
-    return obj
-end
+local ZoneList = ZO_InitializingObject:Subclass()
+ET.class.ZoneList = ZoneList
 
 function ZoneList:Initialize()
     self.zoneById = {}
@@ -205,5 +203,3 @@ function ZoneList:GetHouseFromPartialName(partialHouseName)
     if(#results == 0) then return end
     return self.houseByName[results[1]]
 end
-
-EasyTravel.ZoneList = ZoneList:New()

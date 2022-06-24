@@ -1,8 +1,8 @@
-local L = EasyTravel.Localization
-local chat = EasyTravel.chat
-local WrapFunction = EasyTravel.WrapFunction
-local DialogHelper = EasyTravel.DialogHelper
-local TargetHelper = EasyTravel.TargetHelper
+local ET = EasyTravel
+local internal = ET.internal
+local L = internal.Localization
+local chat = internal.chat
+local WrapFunction = internal.WrapFunction
 
 local EVENT_NAMESPACE1 = "EasyTravel1"
 local EVENT_NAMESPACE2 = "EasyTravel2"
@@ -63,15 +63,12 @@ local RECALL_ABILITY_ID = 6811
 local _, RECALL_CAST_TIME = GetAbilityCastInfo(RECALL_ABILITY_ID)
 RECALL_CAST_TIME = RECALL_CAST_TIME / 1000
 
-local JumpHelper = ZO_Object:Subclass()
+local JumpHelper = ZO_InitializingObject:Subclass()
+ET.class.JumpHelper = JumpHelper
 
-function JumpHelper:New(...)
-    local obj = ZO_Object.New(self)
-    obj:Initialize(...)
-    return obj
-end
-
-function JumpHelper:Initialize()
+function JumpHelper:Initialize(dialogHelper, targetHelper)
+    self.dialogHelper = dialogHelper
+    self.targetHelper = targetHelper
     self.characterName = GetRawUnitName("player")
     self.state = STATE_READY
 
@@ -116,11 +113,12 @@ end
 function JumpHelper:SetState(state)
     self.state = state
 
-    DialogHelper:SetText(STATUS_TEXT[state])
+    local dialogHelper = self.dialogHelper
+    dialogHelper:SetText(STATUS_TEXT[state])
     if(state == STATE_JUMP_STARTED) then
-        DialogHelper:SetCountdown(RECALL_CAST_TIME)
+        dialogHelper:SetCountdown(RECALL_CAST_TIME)
     else
-        DialogHelper:ClearCountdown()
+        dialogHelper:ClearCountdown()
     end
 end
 
@@ -252,14 +250,14 @@ end
 
 function JumpHelper:SetTargetZone(zone)
     self.targetZone = zone
-    TargetHelper:ClearJumpAttempts()
+    self.targetHelper:ClearJumpAttempts()
 end
 
 function JumpHelper:PrepareJump(message, zone)
     if(IsUnitInCombat("player")) then return false end
     CancelCast()
     self:SetTargetZone(zone)
-    DialogHelper:ShowDialog(message)
+    self.dialogHelper:ShowDialog(message)
     self:RegisterEventHandlers()
     if(not zone) then
         self:SetState(STATE_JUMP_REQUESTED)
@@ -275,27 +273,27 @@ end
 
 function JumpHelper:JumpToPlayer(player)
     if(self:PrepareJump(player.zone.name)) then
-        TargetHelper:JumpToPlayer(player)
+        self.targetHelper:JumpToPlayer(player)
     end
 end
 
 function JumpHelper:JumpToGroupLeader()
     local message = GetUnitName(GetGroupLeaderUnitTag())
     if(self:PrepareJump(message)) then
-        TargetHelper:JumpToGroupLeader()
+        self.targetHelper:JumpToGroupLeader()
     end
 end
 
 function JumpHelper:JumpToHouse(houseId)
     local message = GetCollectibleNickname(GetCollectibleIdForHouse(houseId))
     if(self:PrepareJump(message)) then
-        TargetHelper:JumpToHouse(houseId)
+        self.targetHelper:JumpToHouse(houseId)
     end
 end
 
 function JumpHelper:Retry()
     if(not self.targetZone) then return end
-    if(TargetHelper:JumpToNextTargetInZone(self.targetZone)) then
+    if(self.targetHelper:JumpToNextTargetInZone(self.targetZone)) then
         self:SetState(STATE_JUMP_REQUESTED)
     else
         self:SetState(STATE_NO_JUMP_TARGETS)
@@ -303,10 +301,8 @@ function JumpHelper:Retry()
 end
 
 function JumpHelper:CleanUp(wasSuccess)
-    DialogHelper:HideDialog(wasSuccess)
+    self.dialogHelper:HideDialog(wasSuccess)
     self:UnregisterEventHandlers()
     self:SetState(STATE_READY)
-    TargetHelper:ClearJumpAttempts()
+    self.targetHelper:ClearJumpAttempts()
 end
-
-EasyTravel.JumpHelper = JumpHelper:New()

@@ -15,4 +15,4 @@ local localization = { -- provided by Scope
 
     SLASH_COMMAND_DESCRIPTION = "Перемещение к выбранной цели",
 }
-ZO_ShallowTableCopy(localization, EasyTravel.Localization)
+ZO_ShallowTableCopy(localization, EasyTravel.internal.Localization)

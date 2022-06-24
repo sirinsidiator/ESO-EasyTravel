@@ -1,4 +1,7 @@
-local PlayerList = EasyTravel.PlayerList
+local ET = EasyTravel
+local internal = ET.internal
+
+local PlayerList = ET.class.PlayerList
 
 local JUMP_TO = {
     [PlayerList.TYPE_GROUP] = JumpToGroupMember,
@@ -8,15 +11,11 @@ local JUMP_TO = {
     [PlayerList.TYPE_HOUSE] = RequestJumpToHouse,
 }
 
-local TargetHelper = ZO_Object:Subclass()
+local TargetHelper = ZO_InitializingObject:Subclass()
+ET.class.TargetHelper = TargetHelper
 
-function TargetHelper:New(...)
-    local obj = ZO_Object.New(self)
-    obj:Initialize(...)
-    return obj
-end
-
-function TargetHelper:Initialize()
+function TargetHelper:Initialize(playerList)
+    self.playerList = playerList
     self.hasAttemptedJumpTo = {}
 end
 
@@ -31,7 +30,7 @@ local function JumpTo(type, name)
 end
 
 function TargetHelper:JumpToNextTargetInZone(zone)
-    local targets = PlayerList:GetSortedPlayersInZone(zone)
+    local targets = self.playerList:GetSortedPlayersInZone(zone)
     for i = 1, #targets do
         local target = targets[i]
         if(not self.hasAttemptedJumpTo[target.displayName]) then
@@ -54,5 +53,3 @@ end
 function TargetHelper:JumpToHouse(houseId)
     JumpTo(PlayerList.TYPE_HOUSE, houseId)
 end
-
-EasyTravel.TargetHelper = TargetHelper:New()

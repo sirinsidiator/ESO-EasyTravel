@@ -1,5 +1,13 @@
 local ADDON_NAME = "EasyTravel"
-EasyTravel = {}
+local ET = {
+    class = {},
+    internal = {
+        chat = LibChatMessage(ADDON_NAME, "ET")
+    }
+}
+_G[ADDON_NAME] = ET
+local class = ET.class
+local internal = ET.internal
 
 local nextEventHandleIndex = 1
 
@@ -24,10 +32,9 @@ local function WrapFunction(object, functionName, wrapper)
     object[functionName] = function(...) return wrapper(originalFunction, ...) end
 end
 
-EasyTravel.RegisterForEvent = RegisterForEvent
-EasyTravel.UnregisterForEvent = UnregisterForEvent
-EasyTravel.WrapFunction = WrapFunction
-EasyTravel.chat = LibChatMessage(ADDON_NAME, "ET")
+internal.RegisterForEvent = RegisterForEvent
+internal.UnregisterForEvent = UnregisterForEvent
+internal.WrapFunction = WrapFunction
 
 local function OnAddonLoaded(callback)
     local eventHandle = ""
@@ -39,9 +46,16 @@ local function OnAddonLoaded(callback)
 end
 
 OnAddonLoaded(function()
-    local L = EasyTravel.Localization
-    local JumpHelper = EasyTravel.JumpHelper
-    local ZoneList = EasyTravel.ZoneList
+    local zoneList = class.ZoneList:New()
+    internal.zoneList = zoneList
+    internal.playerList = class.PlayerList:New(zoneList)
+    internal.dialogHelper = class.DialogHelper:New()
+    internal.targetHelper = class.TargetHelper:New(internal.playerList)
+    local jumpHelper = class.JumpHelper:New(internal.dialogHelper, internal.targetHelper)
+    internal.jumpHelper = jumpHelper
+    internal.SlashCommandHelper = class.SlashCommandHelper:New(zoneList, internal.playerList, internal.jumpHelper)
+
+    local L = internal.Localization
 
     local CANNOT_JUMP_TO = {
         [1] = true, -- Tamriel
@@ -57,7 +71,7 @@ OnAddonLoaded(function()
 
         for i = 1, #subTargets do
             local target = subTargets[i]
-            AddCustomMenuItem(target.data.name, function() JumpHelper:JumpTo(target.data) end)
+            AddCustomMenuItem(target.data.name, function() jumpHelper:JumpTo(target.data) end)
         end
 
         ShowMenu(control)
@@ -69,14 +83,14 @@ OnAddonLoaded(function()
             return false
         end
 
-        local targetZone = ZoneList:SetMapByIndex(mapIndex)
+        local targetZone = zoneList:SetMapByIndex(mapIndex)
         if(targetZone) then
-            local subTargets = ZoneList:GetSubTargets(mapIndex)
+            local subTargets = zoneList:GetSubTargets(mapIndex)
             if(subTargets) then
                 ShowSubTargetMenu(subTargets, control)
                 return false
             else
-                JumpHelper:JumpTo(targetZone)
+                jumpHelper:JumpTo(targetZone)
                 return true
             end
         end
@@ -85,12 +99,12 @@ OnAddonLoaded(function()
     local function CancelJump()
         CancelCast()
         zo_callLater(function()
-            JumpHelper:CleanUp(false)
+            jumpHelper:CleanUp(false)
         end, 1)
     end
 
-    EasyTravel.JumpTo = AttemptJumpTo
-    EasyTravel.CancelJump = CancelJump
+    ET.JumpTo = AttemptJumpTo
+    ET.CancelJump = CancelJump
 
     ZO_PreHook("ZO_WorldMapLocationRowLocation_OnMouseUp", function(label, button, upInside)
         if(upInside and button == MOUSE_BUTTON_INDEX_RIGHT) then

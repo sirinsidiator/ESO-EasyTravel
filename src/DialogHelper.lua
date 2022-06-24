@@ -1,18 +1,15 @@
-local L = EasyTravel.Localization
+local ET = EasyTravel
+local internal = ET.internal
+local L = internal.Localization
 
 local JUMP_STATUS_DIALOG = "EasyTravelDialog"
 
-local DialogHelper = ZO_Object:Subclass()
-
-function DialogHelper:New(...)
-    local obj = ZO_Object.New(self)
-    obj:Initialize(...)
-    return obj
-end
+local DialogHelper = ZO_InitializingObject:Subclass()
+ET.class.DialogHelper = DialogHelper
 
 function DialogHelper:Initialize()
     local function ClearDialog()
-        EasyTravel:CancelJump()
+        ET:CancelJump()
         self.dialog = nil
     end
 
@@ -97,5 +94,3 @@ end
 function DialogHelper:ClearCountdown()
     self.countdown = nil
 end
-
-EasyTravel.DialogHelper = DialogHelper:New()

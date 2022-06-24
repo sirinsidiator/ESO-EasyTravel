@@ -1,4 +1,4 @@
-EasyTravel.Localization = {
+EasyTravel.internal.Localization = {
     JUMP_FAILED_UNHANDLED = "Jump has been interrupted, unhandled result: %d, %s",
 
     STATUS_TEXT_READY = "Preparing to jump",

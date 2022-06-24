@@ -1,7 +1,10 @@
-local ZoneList = EasyTravel.ZoneList
-local RegisterForEvent = EasyTravel.RegisterForEvent
+local ET = EasyTravel
+local internal = ET.internal
 
-local PlayerList = ZO_CallbackObject:Subclass()
+local RegisterForEvent = internal.RegisterForEvent
+
+local PlayerList = ZO_InitializingCallbackObject:Subclass()
+ET.class.PlayerList = PlayerList
 
 PlayerList.TYPE_GROUP = 1
 PlayerList.TYPE_FRIEND = 2
@@ -11,13 +14,8 @@ PlayerList.TYPE_HOUSE = 5
 
 PlayerList.SET_DIRTY = "SET_DIRTY"
 
-function PlayerList:New(...)
-    local obj = ZO_CallbackObject.New(self)
-    obj:Initialize(...)
-    return obj
-end
-
-function PlayerList:Initialize()
+function PlayerList:Initialize(zoneList)
+    self.zoneList = zoneList
     self.displayName = GetDisplayName()
     self.playersInZone = {}
     self.players = {}
@@ -89,7 +87,7 @@ end
 
 function PlayerList:AddPlayer(displayName, characterName, level, cp, zoneName, type, zone)
     if(not zone) then
-        zone = ZoneList:GetZoneByZoneName(zoneName)
+        zone = self.zoneList:GetZoneByZoneName(zoneName)
     end
     local lowerDisplayName = zo_strlower(displayName)
     -- can't jump to players without a zone and we also don't want to overwrite already collected players
@@ -126,7 +124,7 @@ function PlayerList:CollectGroupMembers()
             local level = GetUnitLevel(unitTag)
             local cp = GetUnitChampionPoints(unitTag)
             local zoneName = GetUnitZone(unitTag)
-            local zone = ZoneList:GetZoneForGroupMember(unitTag)
+            local zone = self.zoneList:GetZoneForGroupMember(unitTag)
             self:AddPlayer(displayName, characterName, level, cp, zoneName, PlayerList.TYPE_GROUP, zone)
         end
     end
@@ -219,5 +217,3 @@ function PlayerList:GetPlayerFromPartialName(partialName)
     local name = results[1]
     return self:GetPlayerByDisplayName(name) or self:GetPlayerByCharacterName(name)
 end
-
-EasyTravel.PlayerList = PlayerList:New()

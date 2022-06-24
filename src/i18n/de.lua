@@ -19,4 +19,4 @@ local localization = {
 
     SLASH_COMMAND_DESCRIPTION = "Reise zum ausgewählten Ziel",
 }
-ZO_ShallowTableCopy(localization, EasyTravel.Localization)
+ZO_ShallowTableCopy(localization, EasyTravel.internal.Localization)

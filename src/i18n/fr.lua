@@ -15,4 +15,4 @@ local localization = { -- provided by Ayantir
 
     SLASH_COMMAND_DESCRIPTION = "Voyage vers la personne spécifiée",
 }
-ZO_ShallowTableCopy(localization, EasyTravel.Localization)
+ZO_ShallowTableCopy(localization, EasyTravel.internal.Localization)

@@ -1,26 +1,24 @@
-local L = EasyTravel.Localization
-local JumpHelper = EasyTravel.JumpHelper
-local ZoneList = EasyTravel.ZoneList
-local PlayerList = EasyTravel.PlayerList
-local chat = EasyTravel.chat
+local ET = EasyTravel
+local internal = ET.internal
+local L = internal.Localization
+local PlayerList = ET.class.PlayerList
+local chat = internal.chat
 local HOME_LABEL = L["AUTOCOMPLETE_HOME_LABEL"]
 
-local SlashCommandHelper = ZO_Object:Subclass()
+local SlashCommandHelper = ZO_InitializingObject:Subclass()
+ET.class.SlashCommandHelper = SlashCommandHelper
 
-function SlashCommandHelper:New(...)
-    local obj = ZO_Object.New(self)
-    obj:Initialize(...)
-    return obj
-end
-
-function SlashCommandHelper:Initialize()
+function SlashCommandHelper:Initialize(zoneList, playerList, jumpHelper)
+    self.zoneList = zoneList
+    self.playerList = playerList
+    self.jumpHelper = jumpHelper
     self.resultList = {}
     self.playerLookup = {}
     self.zoneLookup = {}
     self.houseLookup = {}
     self.dirty = true
 
-    PlayerList:RegisterCallback(PlayerList.SET_DIRTY, function()
+    playerList:RegisterCallback(PlayerList.SET_DIRTY, function()
         self.dirty = true
     end)
 
@@ -50,34 +48,37 @@ function SlashCommandHelper:Initialize()
 end
 
 function SlashCommandHelper:SlashCommandCallback(input, isTopResult)
+    local zoneList = self.zoneList
+    local playerList = self.playerList
+    local jumpHelper = self.jumpHelper
     if(not isTopResult) then
-        PlayerList:Rebuild()
+        playerList:Rebuild()
     end
     if(input == HOME_LABEL and GetHousingPrimaryHouse() > 0) then
-        JumpHelper:JumpToHouse(GetHousingPrimaryHouse())
+        jumpHelper:JumpToHouse(GetHousingPrimaryHouse())
         return
-    elseif(ZoneList:HasZone(input)) then
-        local zone = ZoneList:GetZoneByZoneName(input)
-        JumpHelper:JumpTo(zone)
+    elseif(zoneList:HasZone(input)) then
+        local zone = zoneList:GetZoneByZoneName(input)
+        jumpHelper:JumpTo(zone)
         return
-    elseif(ZoneList:HasHouse(input)) then
-        local house = ZoneList:GetHouseByName(input)
-        JumpHelper:JumpToHouse(house.houseId)
+    elseif(zoneList:HasHouse(input)) then
+        local house = zoneList:GetHouseByName(input)
+        jumpHelper:JumpToHouse(house.houseId)
         return
-    elseif(PlayerList:HasDisplayName(input) or PlayerList:HasCharacterName(input)) then
-        local player = PlayerList:GetPlayerByDisplayName(input) or PlayerList:GetPlayerByCharacterName(input)
-        JumpHelper:JumpToPlayer(player)
+    elseif(playerList:HasDisplayName(input) or playerList:HasCharacterName(input)) then
+        local player = playerList:GetPlayerByDisplayName(input) or playerList:GetPlayerByCharacterName(input)
+        jumpHelper:JumpToPlayer(player)
         return
     elseif(input == "") then
         if(IsUnitGrouped("player") and not IsUnitGroupLeader("player")) then
-            JumpHelper:JumpToGroupLeader()
+            jumpHelper:JumpToGroupLeader()
         else
-            local zone = ZoneList:GetCurrentZone()
+            local zone = zoneList:GetCurrentZone()
             if(not zone) then -- TODO: remember last zone we have been in and jump there instead
                 Print(L["INVALID_TARGET_ZONE"])
                 PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
             else
-                JumpHelper:JumpTo(zone)
+                jumpHelper:JumpTo(zone)
             end
         end
         return
@@ -97,7 +98,7 @@ end
 
 function SlashCommandHelper:GetPlayerResults()
     local playerList = {}
-    local players = PlayerList:GetPlayerList()
+    local players = self.playerList:GetPlayerList()
     ZO_ClearTable(self.playerLookup)
 
     for lower, player in pairs(players) do
@@ -111,11 +112,11 @@ end
 
 function SlashCommandHelper:GetZoneResults()
     local zoneList = {}
-    local zones = ZoneList:GetZoneList()
+    local zones = self.zoneList:GetZoneList()
     ZO_ClearTable(self.zoneLookup)
 
     for zoneName, zone in pairs(zones) do
-        local count = PlayerList:GetPlayerCountForZone(zone)
+        local count = self.playerList:GetPlayerCountForZone(zone)
         local label = zo_strformat(L["AUTOCOMPLETE_ZONE_LABEL_TEMPLATE"], zoneName, count)
         zoneList[zo_strlower(zoneName)] = label
         self.zoneLookup[label] = zoneName
@@ -126,7 +127,7 @@ end
 
 function SlashCommandHelper:GetHouseResults()
     local houseList = {}
-    local houses = ZoneList:GetHouseList()
+    local houses = self.zoneList:GetHouseList()
     ZO_ClearTable(self.houseLookup)
 
     for houseName, house in pairs(houses) do
@@ -159,5 +160,3 @@ end
 function SlashCommandHelper:AutoCompleteResultLookup(label)
     return self.playerLookup[label] or self.zoneLookup[label] or self.houseLookup[label] or label
 end
-
-EasyTravel.SlashCommandHelper = SlashCommandHelper:New()
