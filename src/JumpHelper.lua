@@ -1,7 +1,7 @@
 local ET = EasyTravel
 local internal = ET.internal
-local L = internal.Localization
 local chat = internal.chat
+local gettext = internal.gettext
 local WrapFunction = internal.WrapFunction
 
 local EVENT_NAMESPACE1 = "EasyTravel1"
@@ -17,11 +17,16 @@ local RESULT_SUCCESS = true
 local RESULT_FAILURE = false
 
 local STATUS_TEXT = {
-    [STATE_READY] = L["STATUS_TEXT_READY"],
-    [STATE_JUMP_REQUESTED] = L["STATUS_TEXT_JUMP_REQUESTED"],
-    [STATE_JUMP_STARTED] = L["STATUS_TEXT_JUMP_STARTED"],
-    [STATE_JUMP_REQUEST_FAILED] = L["STATUS_TEXT_JUMP_REQUEST_FAILED"],
-    [STATE_NO_JUMP_TARGETS] = L["STATUS_TEXT_NO_JUMP_TARGETS"],
+    -- TRANSLATORS: Status message for the jump dialog when nothing has happened yet.
+    [STATE_READY] = gettext("Preparing to jump"),
+    -- TRANSLATORS: Status message for the jump dialog when the jump request has been sent to the server.
+    [STATE_JUMP_REQUESTED] = gettext("Jump requested"),
+    -- TRANSLATORS: Status message for the jump dialog when the jump channelling has started. The variable is for the seconds remaining until the actual jump.
+    [STATE_JUMP_STARTED] = gettext("Jump in progress (<<1>> seconds left)"),
+    -- TRANSLATORS: Status message for the jump dialog when the jump request has failed for any reason.
+    [STATE_JUMP_REQUEST_FAILED] = gettext("Jump failed"),
+    -- TRANSLATORS: Status message for the jump dialog when the jump cannot be started due to a lack of players in the target locaton.
+    [STATE_NO_JUMP_TARGETS] = gettext("No suitable players found\nWaiting for new targets"),
 }
 
 local IS_SOCIAL_ERROR_JUMP_RELATED = {
@@ -53,10 +58,13 @@ local CAN_RECOVER_FROM_SOCIAL_ERROR = {
     [SOCIAL_RESULT_CANT_JUMP_INVALID_TARGET] = true,
 }
 
+    -- TRANSLATORS: Generic alert message for when a jump cannot be started due to the current player state
+local GENERIC_JUMP_FAILURE_MESSAGE = gettext("You cannot travel right now.")
 local PLAYER_BUSY_MESSAGE = {
-    [ACTION_RESULT_SPRINTING] = L["JUMP_FAILED_SPRINTING"],
-    [ACTION_RESULT_STUNNED] = L["JUMP_FAILED_GENERIC"],
-    [ACTION_RESULT_DISORIENTED] = L["JUMP_FAILED_GENERIC"],
+    -- TRANSLATORS: Alert message when a jump cannot be started due to the player currently sprinting
+    [ACTION_RESULT_SPRINTING] = gettext("You cannot travel while sprinting."),
+    [ACTION_RESULT_STUNNED] = GENERIC_JUMP_FAILURE_MESSAGE,
+    [ACTION_RESULT_DISORIENTED] = GENERIC_JUMP_FAILURE_MESSAGE,
 }
 
 local RECALL_ABILITY_ID = 6811
@@ -147,7 +155,8 @@ function JumpHelper:OnCombatEventErrors(eventCode, result, isError, abilityName,
             ZO_Alert(UI_ALERT_CATEGORY_ALERT, SOUNDS.GENERAL_ALERT_ERROR, PLAYER_BUSY_MESSAGE[result])
             self:CleanUp(RESULT_FAILURE)
         else
-            chat:Printf(L["JUMP_FAILED_UNHANDLED"], result, GetString("SI_ACTIONRESULT", result))
+            -- TRANSLATORS: Chat message when a jump failed in a way the addon does not know about yet.
+            chat:Printf(gettext("Jump has been interrupted, unhandled result: %d, %s"), result, GetString("SI_ACTIONRESULT", result))
             self:CleanUp(RESULT_FAILURE)
         end
     end

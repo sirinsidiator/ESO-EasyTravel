@@ -3,11 +3,13 @@ local ET = {
     class = {},
     internal = {
         chat = LibChatMessage(ADDON_NAME, "ET")
+        gettext = LibGetText(ADDON_NAME)
     }
 }
 _G[ADDON_NAME] = ET
 local class = ET.class
 local internal = ET.internal
+local gettext = internal.gettext
 
 local nextEventHandleIndex = 1
 
@@ -55,8 +57,6 @@ OnAddonLoaded(function()
     internal.jumpHelper = jumpHelper
     internal.SlashCommandHelper = class.SlashCommandHelper:New(zoneList, internal.playerList, internal.jumpHelper)
 
-    local L = internal.Localization
-
     local CANNOT_JUMP_TO = {
         [1] = true, -- Tamriel
         [24] = true, -- The Aurbis
@@ -79,7 +79,8 @@ OnAddonLoaded(function()
 
     local function AttemptJumpTo(mapIndex, control)
         if(CANNOT_JUMP_TO[mapIndex]) then
-            ZO_Alert(UI_ALERT_CATEGORY_ALERT, SOUNDS.GENERAL_ALERT_ERROR, L["INVALID_TARGET_ZONE"])
+            -- TRANSLATORS: Alert message when trying to jump to a location that can not be reached
+            ZO_Alert(UI_ALERT_CATEGORY_ALERT, SOUNDS.GENERAL_ALERT_ERROR, gettext("Target cannot be reached via jump"))
             return false
         end
 

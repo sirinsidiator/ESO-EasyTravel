@@ -1,9 +1,10 @@
 local ET = EasyTravel
 local internal = ET.internal
-local L = internal.Localization
 local PlayerList = ET.class.PlayerList
 local chat = internal.chat
-local HOME_LABEL = L["AUTOCOMPLETE_HOME_LABEL"]
+local gettext = internal.gettext
+-- TRANSLATORS: Value used to refer to the primary home in slash commands
+local HOME_LABEL = gettext("home")
 
 local SlashCommandHelper = ZO_InitializingObject:Subclass()
 ET.class.SlashCommandHelper = SlashCommandHelper
@@ -43,7 +44,10 @@ function SlashCommandHelper:Initialize(zoneList, playerList, jumpHelper)
     end
     self.autocompleteResultProvider = EasyTravelAutoCompleteProvider
 
-    self.command = LSC:Register({"/tp", "/travel", "/goto"}, SlashCommandCallback, L["SLASH_COMMAND_DESCRIPTION"])
+    -- TRANSLATORS: comma-separated list of slash commands for EasyTravel
+    local commands = {zo_strsplit(",", gettext("/tp,/travel,/goto"))}
+    -- TRANSLATORS: description of the slash commands in the autocomplete list
+    self.command = LSC:Register(commands, SlashCommandCallback, gettext("Travel to the specified target"))
     self.command:SetAutoComplete(EasyTravelAutoCompleteProvider:New())
 end
 
@@ -75,8 +79,7 @@ function SlashCommandHelper:SlashCommandCallback(input, isTopResult)
         else
             local zone = zoneList:GetCurrentZone()
             if(not zone) then -- TODO: remember last zone we have been in and jump there instead
-                Print(L["INVALID_TARGET_ZONE"])
-                PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
+                self:PrintInvalidTargetMessage()
             else
                 jumpHelper:JumpTo(zone)
             end
@@ -92,7 +95,12 @@ function SlashCommandHelper:SlashCommandCallback(input, isTopResult)
         end
     end
 
-    chat:Print(L["INVALID_TARGET_ZONE"])
+    self:PrintInvalidTargetMessage()
+end
+
+function SlashCommandHelper:PrintInvalidTargetMessage()
+    -- TRANSLATORS: chat message when a target specified via slash command is not valid
+    chat:Print(gettext("Target cannot be reached via jump"))
     PlaySound(SOUNDS.GENERAL_ALERT_ERROR)
 end
 
@@ -102,7 +110,8 @@ function SlashCommandHelper:GetPlayerResults()
     ZO_ClearTable(self.playerLookup)
 
     for lower, player in pairs(players) do
-        local label = zo_strformat(L["AUTOCOMPLETE_PLAYER_LABEL_TEMPLATE"], player.characterName, player.displayName, player.zone.name)
+        -- TRANSLATORS: template for showing player entries in the slash command auto complete list. <<1>> is the character name, <<2>> the account name and <<3>> the name of the zone they are currently in.
+        local label = zo_strformat(gettext("<<1>><<2>> -|caaaaaa <<3>>"), player.characterName, player.displayName, player.zone.name)
         playerList[zo_strlower(player.characterName .. player.displayName)] = label
         self.playerLookup[label] = player.displayName
     end
@@ -117,7 +126,8 @@ function SlashCommandHelper:GetZoneResults()
 
     for zoneName, zone in pairs(zones) do
         local count = self.playerList:GetPlayerCountForZone(zone)
-        local label = zo_strformat(L["AUTOCOMPLETE_ZONE_LABEL_TEMPLATE"], zoneName, count)
+        -- TRANSLATORS: template for showing zone entries in the slash command auto complete list. <<1>> is the zone name, <<2>> the number of players currently in the zone.
+        local label = zo_strformat(gettext("<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>"), zoneName, count)
         zoneList[zo_strlower(zoneName)] = label
         self.zoneLookup[label] = zoneName
     end
@@ -130,14 +140,20 @@ function SlashCommandHelper:GetHouseResults()
     local houses = self.zoneList:GetHouseList()
     ZO_ClearTable(self.houseLookup)
 
+    -- TRANSLATORS: template for showing owned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
+    local UNLOCKED_HOME_TEMPLATE = gettext("<<1>> -|caaaaaa <<2>>")
+    -- TRANSLATORS: template for showing unowned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
+    local LOCKED_HOME_TEMPLATE = gettext("<<1>> -|caaaaaa <<2>> (preview)")
     for houseName, house in pairs(houses) do
         local zoneName = house.foundInZoneName
-        local template = house.unlocked and L["AUTOCOMPLETE_UNLOCKED_HOME_LABEL_TEMPLATE"] or L["AUTOCOMPLETE_LOCKED_HOME_LABEL_TEMPLATE"]
+
+        local template = house.unlocked and UNLOCKED_HOME_TEMPLATE or LOCKED_HOME_TEMPLATE
         local label = zo_strformat(template, houseName, zoneName)
         houseList[zo_strlower(houseName)] = label
         self.houseLookup[label] = houseName
         if(IsPrimaryHouse(house.houseId)) then
-            local label = zo_strformat(L["AUTOCOMPLETE_PRIMARY_HOME_LABEL_TEMPLATE"], HOME_LABEL, houseName, zoneName)
+            -- TRANSLATORS: template for showing the housing entry of the primary home in the slash command auto complete list. <<1>> is the localized value referring to the primary home in slash commands (e.g. home), <<2>> the name of the house and <<3>> the name of the zone the house is found in.
+            local label = zo_strformat(gettext("<<1>> -|caaaaaa <<2>>, <<3>>"), HOME_LABEL, houseName, zoneName)
             houseList[zo_strlower(HOME_LABEL)] = label
             self.houseLookup[label] = HOME_LABEL
         end

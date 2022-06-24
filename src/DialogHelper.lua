@@ -1,6 +1,6 @@
 local ET = EasyTravel
 local internal = ET.internal
-local L = internal.Localization
+local gettext = internal.gettext
 
 local JUMP_STATUS_DIALOG = "EasyTravelDialog"
 
@@ -23,7 +23,8 @@ function DialogHelper:Initialize()
         canQueue = true,
         showLoadingIcon = ZO_Anchor:New(BOTTOM, ZO_Dialog1Text, BOTTOM, 0, 40),
         title = {
-            text = L["DIALOG_TITLE"],
+            -- TRANSLATORS: Title of the dialog shown while jumping to a new location. The variable is for the name of the location.
+            text = gettext("Traveling to <<1>>"),
         },
         mainText = {
             align = TEXT_ALIGN_CENTER,
