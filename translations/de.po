@@ -1,14 +1,18 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR sirinsidiator
+# This file is distributed under the same license as the EasyTravel package.
 # sirinsidiator <sir@insidi.at>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 17:07+0000\n"
-"PO-Revision-Date: 2022-06-25 17:07+0000\n"
+"Project-Id-Version: EasyTravel\n"
+"Report-Msgid-Bugs-To: https://weblate.sir.insidi.at/or/projects/easytravel/"
+"messages/\n"
+"POT-Creation-Date: 2022-06-25 16:49+0000\n"
+"PO-Revision-Date: 2022-06-25 18:16+0000\n"
 "Last-Translator: sirinsidiator <sir@insidi.at>\n"
-"Language-Team: English <https://weblate.sir.insidi.at/or/projects/easytravel/"
-"messages/en/>\n"
-"Language: en\n"
+"Language-Team: German <https://weblate.sir.insidi.at/or/projects/easytravel/"
+"messages/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,27 +22,27 @@ msgstr ""
 #. TRANSLATORS: Title of the dialog shown while jumping to a new location. The variable is for the name of the location.
 #: src/DialogHelper.lua:27
 msgid "Traveling to <<1>>"
-msgstr "Traveling to <<1>>"
+msgstr "Reise nach <<1>>"
 
 #. TRANSLATORS: Status message for the jump dialog when nothing has happened yet.
 #: src/JumpHelper.lua:21
 msgid "Preparing to jump"
-msgstr "Preparing to jump"
+msgstr "Vorbereitung auf Sprung"
 
 #. TRANSLATORS: Status message for the jump dialog when the jump request has been sent to the server.
 #: src/JumpHelper.lua:23
 msgid "Jump requested"
-msgstr "Jump requested"
+msgstr "Sprung angefordert"
 
 #. TRANSLATORS: Status message for the jump dialog when the jump channelling has started. The variable is for the seconds remaining until the actual jump.
 #: src/JumpHelper.lua:25
 msgid "Jump in progress (<<1>> seconds left)"
-msgstr "Jump in progress (<<1>> seconds left)"
+msgstr "Sprung läuft (<<1>> Sekunden verbleibend)"
 
 #. TRANSLATORS: Status message for the jump dialog when the jump request has failed for any reason.
 #: src/JumpHelper.lua:27
 msgid "Jump failed"
-msgstr "Jump failed"
+msgstr "Sprung fehlgeschlagen"
 
 #. TRANSLATORS: Status message for the jump dialog when the jump cannot be started due to a lack of players in the target locaton.
 #: src/JumpHelper.lua:29
@@ -46,24 +50,24 @@ msgid ""
 "No suitable players found\n"
 "Waiting for new targets"
 msgstr ""
-"No suitable players found\n"
-"Waiting for new targets"
+"Keine passenden Spieler gefunden\n"
+"Warte auf neue Ziele"
 
 #. TRANSLATORS: Generic alert message for when a jump cannot be started due to the current player state
 #: src/JumpHelper.lua:62
 msgid "You cannot travel right now."
-msgstr "You cannot travel right now."
+msgstr "Ihr könnt momentan nicht reisen."
 
 #. TRANSLATORS: Alert message when a jump cannot be started due to the player currently sprinting
 #: src/JumpHelper.lua:65
 msgid "You cannot travel while sprinting."
-msgstr "You cannot travel while sprinting."
+msgstr "Ihr könnt nicht reisen während ihr rennt."
 
 #. TRANSLATORS: Chat message when a jump failed in a way the addon does not know about yet.
 #: src/JumpHelper.lua:159
 #, lua-format
 msgid "Jump has been interrupted, unhandled result: %d, %s"
-msgstr "Jump has been interrupted, unhandled result: %d, %s"
+msgstr "Sprung wurde unterbrochen, unbehandeltes Resultat: %d, %s"
 
 #. TRANSLATORS: Value used to refer to the primary home in slash commands
 #: src/SlashCommandHelper.lua:7
@@ -78,13 +82,13 @@ msgstr "/tp,/travel,/goto"
 #. TRANSLATORS: description of the slash commands in the autocomplete list
 #: src/SlashCommandHelper.lua:50
 msgid "Travel to the specified target"
-msgstr "Travel to the specified target"
+msgstr "Reise zum ausgewählten Ziel"
 
 #. TRANSLATORS: chat message when a target specified via slash command is not valid
 #. TRANSLATORS: Alert message when trying to jump to a location that can not be reached
 #: src/SlashCommandHelper.lua:103 src/StartUp.lua:83
 msgid "Target cannot be reached via jump"
-msgstr "Target cannot be reached via jump"
+msgstr "Ziel kann nicht durch einen Sprung erreicht werden"
 
 #. TRANSLATORS: template for showing player entries in the slash command auto complete list. <<1>> is the character name, <<2>> the account name and <<3>> the name of the zone they are currently in.
 #: src/SlashCommandHelper.lua:114
@@ -94,7 +98,7 @@ msgstr "<<1>><<2>> -|caaaaaa <<3>>"
 #. TRANSLATORS: template for showing zone entries in the slash command auto complete list. <<1>> is the zone name, <<2>> the number of players currently in the zone.
 #: src/SlashCommandHelper.lua:130
 msgid "<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>"
-msgstr "<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>"
+msgstr "<<1>> -|caaaaaa <<2[keine Spieler/$d Spieler/$d Spieler]>>"
 
 #. TRANSLATORS: template for showing owned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:144
@@ -104,7 +108,7 @@ msgstr "<<1>> -|caaaaaa <<2>>"
 #. TRANSLATORS: template for showing unowned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:146
 msgid "<<1>> -|caaaaaa <<2>> (preview)"
-msgstr "<<1>> -|caaaaaa <<2>> (preview)"
+msgstr "<<1>> -|caaaaaa <<2>> (Vorschau)"
 
 #. TRANSLATORS: template for showing the housing entry of the primary home in the slash command auto complete list. <<1>> is the localized value referring to the primary home in slash commands (e.g. home), <<2>> the name of the house and <<3>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:156
