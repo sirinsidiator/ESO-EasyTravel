@@ -2,8 +2,8 @@ local ADDON_NAME = "EasyTravel"
 local ET = {
     class = {},
     internal = {
-        chat = LibChatMessage(ADDON_NAME, "ET")
-        gettext = LibGetText(ADDON_NAME)
+        chat = LibChatMessage(ADDON_NAME, "ET"),
+        gettext = LibGetText(ADDON_NAME).gettext
     }
 }
 _G[ADDON_NAME] = ET
