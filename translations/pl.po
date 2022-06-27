@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://weblate.sir.insidi.at/or/projects/easytravel/"
 "messages/\n"
 "POT-Creation-Date: 2022-06-26 13:09+0000\n"
-"PO-Revision-Date: 2022-06-27 16:00+0000\n"
-"Last-Translator: Marcin Tajniacki <generaluploads@gmail.com>\n"
+"PO-Revision-Date: 2022-06-28 16:50+0000\n"
+"Last-Translator: sirinsidiator <sir@insidi.at>\n"
 "Language-Team: Polish <https://weblate.sir.insidi.at/or/projects/easytravel/"
 "messages/pl/>\n"
 "Language: pl\n"
@@ -105,7 +105,7 @@ msgstr "<<1>> -|caaaaaa <<2[brak graczy/$d gracz/$d graczy]>>"
 #. TRANSLATORS: template for showing owned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:144
 msgid "<<1>> -|caaaaaa <<2>>"
-msgstr "<<1>><<2>> -|caaaaaa <<3>>"
+msgstr "<<1>> -|caaaaaa <<2>>"
 
 #. TRANSLATORS: template for showing unowned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:146

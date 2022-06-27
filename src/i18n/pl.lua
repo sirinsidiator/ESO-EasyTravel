@@ -2,9 +2,9 @@
 -- Visit https://weblate.sir.insidi.at/or/projects/easytravel/messages/pl/ to update translations.
 local settext = LibGetText("EasyTravel").settext
 settext("home", "Dom")
-settext("<<1>> -|caaaaaa <<2>>", "<<1>><<2>> -|caaaaaa <<3>>")
 settext("<<1>> -|caaaaaa <<2>> (preview)", "<<1>> -|caaaaaa <<2>> (podgląd)")
 settext("<<1>> -|caaaaaa <<2>>, <<3>>", "<<1>> -|caaaaaa <<2>>, <<3>>")
+settext("<<1>> -|caaaaaa <<2>>", "<<1>> -|caaaaaa <<2>>")
 settext("Traveling to <<1>>", "Podróż do: <<1>>")
 settext("Preparing to jump", "Przygotowywanie do skoku")
 settext("Jump requested", "Żądanie skoku")
