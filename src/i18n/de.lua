@@ -3,7 +3,8 @@
 local settext = LibGetText("EasyTravel").settext
 settext("You cannot travel while sprinting.", "Ihr könnt nicht reisen während ihr rennt.")
 settext("Jump has been interrupted, unhandled result: %d, %s", "Sprung wurde unterbrochen, unbehandeltes Resultat: %d, %s")
-settext("home", "home")
+settext("home", "Heim")
+settext("No suitable players found\nWaiting for new targets", "Keine passenden Spieler gefunden\nWarte auf neue Ziele")
 settext("/tp,/travel,/goto", "/tp,/travel,/goto")
 settext("Travel to the specified target", "Reise zum ausgewählten Ziel")
 settext("Target cannot be reached via jump", "Ziel kann nicht durch einen Sprung erreicht werden")
@@ -12,7 +13,6 @@ settext("<<1>> -|caaaaaa <<2[no players/$d player/$d players]>>", "<<1>> -|caaaa
 settext("<<1>> -|caaaaaa <<2>>", "<<1>> -|caaaaaa <<2>>")
 settext("<<1>> -|caaaaaa <<2>> (preview)", "<<1>> -|caaaaaa <<2>> (Vorschau)")
 settext("<<1>> -|caaaaaa <<2>>, <<3>>", "<<1>> -|caaaaaa <<2>>, <<3>>")
-settext("No suitable players found\nWaiting for new targets", "Keine passenden Spieler gefunden\nWarte auf neue Ziele")
 settext("Traveling to <<1>>", "Reise nach <<1>>")
 settext("Preparing to jump", "Vorbereitung auf Sprung")
 settext("Jump requested", "Sprung angefordert")
