@@ -2,14 +2,15 @@
 # Copyright (C) YEAR sirinsidiator
 # This file is distributed under the same license as the EasyTravel package.
 # sirinsidiator <sir@insidi.at>, 2022.
+# Dmitry Listopadov <lulukreicer@yandex.ru>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: EasyTravel\n"
 "Report-Msgid-Bugs-To: https://weblate.sir.insidi.at/or/projects/easytravel/"
 "messages/\n"
 "POT-Creation-Date: 2022-06-26 13:09+0000\n"
-"PO-Revision-Date: 2022-06-25 18:16+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-07-16 19:50+0000\n"
+"Last-Translator: Dmitry Listopadov <lulukreicer@yandex.ru>\n"
 "Language-Team: Russian <https://weblate.sir.insidi.at/or/projects/easytravel/"
 "messages/ru/>\n"
 "Language: ru\n"
@@ -57,12 +58,12 @@ msgstr ""
 #. TRANSLATORS: Generic alert message for when a jump cannot be started due to the current player state
 #: src/JumpHelper.lua:62
 msgid "You cannot travel right now."
-msgstr ""
+msgstr "Вы не можете перемещаться прямо сейчас."
 
 #. TRANSLATORS: Alert message when a jump cannot be started due to the player currently sprinting
 #: src/JumpHelper.lua:65
 msgid "You cannot travel while sprinting."
-msgstr ""
+msgstr "Вы не можете перемещаться пока бежите."
 
 #. TRANSLATORS: Chat message when a jump failed in a way the addon does not know about yet.
 #: src/JumpHelper.lua:159
@@ -109,7 +110,7 @@ msgstr "<<1>> -|caaaaaa <<2>>"
 #. TRANSLATORS: template for showing unowned housing entries in the slash command auto complete list. <<1>> is the name of the house, <<2>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:146
 msgid "<<1>> -|caaaaaa <<2>> (preview)"
-msgstr ""
+msgstr "<<1>> -|caaaaaa <<2>> (предпросмотр)"
 
 #. TRANSLATORS: template for showing the housing entry of the primary home in the slash command auto complete list. <<1>> is the localized value referring to the primary home in slash commands (e.g. home), <<2>> the name of the house and <<3>> the name of the zone the house is found in.
 #: src/SlashCommandHelper.lua:156
