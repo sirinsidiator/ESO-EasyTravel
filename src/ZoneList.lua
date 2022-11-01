@@ -76,6 +76,7 @@ function ZoneList:Initialize()
         1283, -- The Shambles
         1286, -- The Deadlands
         1318, -- High Isle and Amenos
+        1383, -- Galen and Y'ffelon
     }
 
     for i = 1, #zoneIds do
