@@ -77,6 +77,8 @@ function ZoneList:Initialize()
         1286, -- The Deadlands
         1318, -- High Isle and Amenos
         1383, -- Galen and Y'ffelon
+        1413, -- Apocrypha
+        1414, -- Telvanni Peninsula
     }
 
     for i = 1, #zoneIds do
