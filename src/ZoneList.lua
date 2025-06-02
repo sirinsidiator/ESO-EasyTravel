@@ -79,7 +79,8 @@ function ZoneList:Initialize()
         1383, -- Galen and Y'ffelon
         1413, -- Apocrypha
         1414, -- Telvanni Peninsula
-        1443, -- West Weald
+        1443, -- West Weald,
+        1502, -- Solstice
     }
 
     for i = 1, #zoneIds do
