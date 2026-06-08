@@ -80,7 +80,8 @@ function ZoneList:Initialize()
         1413, -- Apocrypha
         1414, -- Telvanni Peninsula
         1443, -- West Weald,
-        1502, -- Solstice
+        1502, -- Solstice,
+        1559, -- Night Market
     }
 
     for i = 1, #zoneIds do
